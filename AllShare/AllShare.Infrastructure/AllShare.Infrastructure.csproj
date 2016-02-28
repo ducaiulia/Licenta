@@ -49,12 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="DatabaseEngine\ApplicationDbContext.cs" />
     <Compile Include="DatabaseEngine\InitializeDatabase.cs" />
     <Compile Include="Migrations\201602222111276_AddUser.cs" />
     <Compile Include="Migrations\201602222111276_AddUser.Designer.cs">
       <DependentUpon>201602222111276_AddUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602232112087_User_ChangePrimaryKey.cs" />
+    <Compile Include="Migrations\201602232112087_User_ChangePrimaryKey.Designer.cs">
+      <DependentUpon>201602232112087_User_ChangePrimaryKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602232120135_User_ChangePrimaryKey1.cs" />
+    <Compile Include="Migrations\201602232120135_User_ChangePrimaryKey1.Designer.cs">
+      <DependentUpon>201602232120135_User_ChangePrimaryKey1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602232123443_User_IdentityOff.cs" />
+    <Compile Include="Migrations\201602232123443_User_IdentityOff.Designer.cs">
+      <DependentUpon>201602232123443_User_IdentityOff.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,7 +85,17 @@
     <EmbeddedResource Include="Migrations\201602222111276_AddUser.resx">
       <DependentUpon>201602222111276_AddUser.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602232112087_User_ChangePrimaryKey.resx">
+      <DependentUpon>201602232112087_User_ChangePrimaryKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602232120135_User_ChangePrimaryKey1.resx">
+      <DependentUpon>201602232120135_User_ChangePrimaryKey1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602232123443_User_IdentityOff.resx">
+      <DependentUpon>201602232123443_User_IdentityOff.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -11,7 +11,7 @@ namespace AllShare.Infrastructure.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(AllShare.Infrastructure.DatabaseEngine.ApplicationDbContext context)

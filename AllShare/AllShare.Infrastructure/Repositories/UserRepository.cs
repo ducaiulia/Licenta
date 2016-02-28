@@ -13,9 +13,14 @@ namespace AllShare.Infrastructure.Repositories
     public class UserRepository: IUserRepository
     {
         ApplicationDbContext dbContext = new ApplicationDbContext();
-        public void Add(User user)
+        public User Add(User user)
         {
-            dbContext.Users.Add(user);
+            if (dbContext.Users.FirstOrDefault(u => u.Username.Equals(user.Username)) != null)
+                throw new Exception("Username already exists");
+
+            var newUser = dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+            return newUser;
         }
 
         public void Edit(User user)
@@ -33,6 +38,16 @@ namespace AllShare.Infrastructure.Repositories
         public IList<User> GetAll()
         {
             return dbContext.Users.ToList();
+        }
+
+        public User GetUser(string username)
+        {
+            var user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
+
+            if (user == null)
+                return null;
+
+            return user;
         }
     }
 }

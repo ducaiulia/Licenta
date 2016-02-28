@@ -9,9 +9,10 @@ namespace AllShare.Core.Repositories
 {
     public interface IUserRepository
     {
-        void Add(User user);
+        User Add(User user);
         void Edit(User user);
         void Remove(int userId);
         IList<User> GetAll();
+        User GetUser(string username);
     }
 }
