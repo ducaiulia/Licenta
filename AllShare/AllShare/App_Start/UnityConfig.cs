@@ -2,6 +2,7 @@ using System;
 using AllShare.Core.Repositories;
 using AllShare.Infrastructure.Repositories;
 using AllShare.Services.Account;
+using AllShare.Services.NewsFeed;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 
@@ -41,8 +42,10 @@ namespace AllShare.App_Start
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IAccountService, AccountService>();
+            container.RegisterType<INewsFeedService, NewsFeedService>();
             container.RegisterType<IUserRepository, UserRepository>();
-            
+            container.RegisterType<IPostRepository, PostRepository>();
+
         }
     }
 }

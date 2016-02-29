@@ -188,7 +188,11 @@
     <Compile Include="Models\AccountInput.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\Builders\AccountViewModelBuilder.cs" />
+    <Compile Include="Models\Builders\FeedViewModelBuilder.cs" />
     <Compile Include="Models\Builders\IViewModelBuilder.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Models\NewsFeedViewModel.cs" />
+    <Compile Include="Models\PostViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

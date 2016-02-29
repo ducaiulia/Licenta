@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 using AllShare.Core.Domain;
 
 namespace AllShare.Infrastructure.DatabaseEngine
@@ -14,5 +9,13 @@ namespace AllShare.Infrastructure.DatabaseEngine
         { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Post> Posts { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Post>().HasRequired(p => p.User)
+                .WithMany(b => b.Posts)
+                .HasForeignKey(p => p.UserId);
+        }
     }
 }

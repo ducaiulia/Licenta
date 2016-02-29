@@ -1,8 +1,22 @@
-﻿@model AllShare.Models.AccountViewModel
+﻿@model AllShare.Models.HomeViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
-<h2>Welcome, @Model.Username !</h2>
+<h2>Welcome, @Model.Account.Username !</h2>
+@using (Ajax.BeginForm("Post", "Home", new AjaxOptions {HttpMethod = "POST"}))
+{
+    <textarea placeholder="Your text..." name="Text"></textarea>
+    <button type="submit">Add Post</button>
+}
+
+@if (@Model.NewsFeed.Posts.Count == 0)
+{
+    <h4>No Posts yet.</h4>
+}
+else
+{
+    <h4>More Posts are here!!!!</h4>
+}
 
 <a href="@Url.Action("Logout", "Account")">Logout</a>

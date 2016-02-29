@@ -35,6 +35,20 @@ namespace AllShare.App_Start
                 config.Bind(source => source.Username, target => target.Username);
                 config.Bind(source => source.Password, target => target.Password);
             });
+
+            TinyMapper.Bind<Post, PostDTO>(config =>
+            {
+                config.Bind(source => source.Text, target => target.Text);
+                config.Bind(source => source.DateTime, target => target.DateTime);
+                config.Bind(source => source.User, target => target.User);
+            });
+
+            TinyMapper.Bind<PostDTO, PostViewModel>(config =>
+            {
+                config.Bind(source => source.Text, target => target.Text);
+                config.Bind(source => source.DateTime, target => target.DateTime);
+                config.Bind(source => source.User, target => target.User);
+            });
         }
     }
 }
