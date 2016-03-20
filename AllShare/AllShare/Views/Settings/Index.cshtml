@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Settings";
+}
+
+
+<div class="row">
+    <div class="icon-bar three-up">
+        <a class="item" href="@Url.Action("Index","Home")">
+            <i class="step fi-home size-12"></i>
+            <label>Home</label>
+        </a>
+        <a class="item" href="@Url.Action("Index", "Settings")">
+            <i class="step fi-widget size-12"></i>
+            <label>Settings</label>
+        </a>
+        <a class="item" href="@Url.Action("Logout", "Account")">
+            <i class="step fi-target size-12"></i>
+            <label>Logout</label>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <h2>Settings</h2>
+    <p>Log in with Facebook</p>
+    <a class="item" href="@Url.Action("Facebook", "Settings")">
+        <i class="step fi-social-facebook size-12"></i>
+    </a>
+</div>

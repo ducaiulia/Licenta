@@ -17,17 +17,20 @@ namespace AllShare.App_Start
             {
                 config.Bind(source => source.Password, target => target.Password);
                 config.Bind(source => source.Username, target => target.Username);
+                config.Bind(source => source.FacebookToken, target => target.FacebookToken);
             });
 
             TinyMapper.Bind<UserDTO, User>(config =>
             {
                 config.Bind(source => source.Password, target => target.Password);
                 config.Bind(source => source.Username, target => target.Username);
+                config.Bind(source => source.FacebookToken, target => target.FacebookToken);
             });
 
             TinyMapper.Bind<UserDTO, AccountViewModel>(config =>
             {
                 config.Bind(source => source.Username, target => target.Username);
+                config.Bind(source => source.FacebookToken, target => target.FacebookToken);
             });
 
             TinyMapper.Bind<AccountInput, UserDTO>(config =>

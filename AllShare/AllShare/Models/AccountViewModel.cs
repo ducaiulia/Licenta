@@ -7,6 +7,8 @@ namespace AllShare.Models
 {
     public class AccountViewModel
     {
-        public string Username { get; set; }   
+        public string Username { get; set; }
+        public bool IsFbAuthenticated { get; set; }
+        public string FacebookToken { get; set; }
     }
 }

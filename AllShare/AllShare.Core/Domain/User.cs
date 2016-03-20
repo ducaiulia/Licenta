@@ -16,6 +16,7 @@ namespace AllShare.Core.Domain
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public ICollection<Post> Posts { get; set; }
+        public string FacebookToken { get; set; }
     }
 }

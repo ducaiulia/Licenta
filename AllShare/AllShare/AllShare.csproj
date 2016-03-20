@@ -182,6 +182,8 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\SocialController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -198,9 +200,18 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\foundation\foundation-icons.css" />
+    <Content Include="Content\foundation\foundation-icons.svg" />
     <Content Include="Content\foundation\foundation.css" />
     <Content Include="Content\foundation\foundation.mvc.css" />
     <Content Include="Content\foundation\normalize.css" />
+    <Content Include="Content\images\1.jpg" />
+    <Content Include="Content\images\2.jpg" />
+    <Content Include="Content\images\3.jpg" />
+    <Content Include="Content\images\4.jpg" />
+    <Content Include="Content\images\5.jpg" />
+    <Content Include="Content\images\fi-home.svg" />
+    <Content Include="Content\images\fi-widget.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -208,6 +219,11 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Readme\Foundation for sites\readme.md" />
+    <Content Include="Content\foundation\foundation-icons.eot" />
+    <Content Include="Content\foundation\foundation-icons.ttf" />
+    <Content Include="Content\foundation\foundation-icons.woff" />
+    <Content Include="Content\foundation\.fontcustom-data" />
+    <Content Include="Content\foundation\.DS_Store" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\foundation\fastclick.js" />
     <Content Include="Scripts\foundation\foundation.abide.js" />
@@ -235,6 +251,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Main.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -257,9 +274,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Facebook.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Social\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

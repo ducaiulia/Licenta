@@ -14,5 +14,7 @@ namespace AllShare.Core.Repositories
         void Remove(int userId);
         IList<User> GetAll();
         User GetUser(string username);
+
+        void SaveFacebookToken(string username, string token);
     }
 }

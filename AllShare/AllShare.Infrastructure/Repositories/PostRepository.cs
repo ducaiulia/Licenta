@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using AllShare.Core.Domain;
 using AllShare.Core.Repositories;
@@ -13,7 +14,7 @@ namespace AllShare.Infrastructure.Repositories
         {
             using (var dbContext = new ApplicationDbContext())
             {
-                return dbContext.Posts.OrderBy(p => p.DateTime).ToList();
+                return dbContext.Posts.Include(p => p.User).OrderBy(p => p.DateTime).ToList();
             }
         }
 

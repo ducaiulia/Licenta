@@ -36,5 +36,18 @@ namespace AllShare.Services.Account
                 return new ServiceResult<UserDTO> {ResultType = ResultType.Error};   
             }
         }
+
+        public ServiceResult<bool> SaveFacebookToken(string username, string token)
+        {
+            try
+            {
+                UserRepository.SaveFacebookToken(username, token);
+                return new ServiceResult<bool> { ResultType = ResultType.Success };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResult<bool> { ResultType = ResultType.Error };
+            }
+        }
     }
 }

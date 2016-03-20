@@ -10,5 +10,6 @@ namespace AllShare.Services.DTOs
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public string FacebookToken { get; set; }
     }
 }

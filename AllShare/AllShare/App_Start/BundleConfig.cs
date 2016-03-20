@@ -19,6 +19,9 @@ namespace AllShare
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/allshare").Include(
+                        "~/Scripts/Main.js"));
+
             #region Foundation Bundles
 
             bundles.Add(Foundation.Styles());

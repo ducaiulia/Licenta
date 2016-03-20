@@ -1,4 +1,5 @@
-﻿using System.Web.Helpers;
+﻿using System;
+using System.Web.Helpers;
 using AllShare.Services.Account;
 using AllShare.Services.DTOs;
 using AllShare.Services.Utils;
@@ -25,7 +26,10 @@ namespace AllShare.Models.Builders
                     return null;
                 if (!Crypto.VerifyHashedPassword(result.Result.Password, _accountInput.Password))
                     return null;
-                return TinyMapper.Map<AccountViewModel>(result.Result);
+
+                var viewModel = TinyMapper.Map<AccountViewModel>(result.Result);
+                viewModel.IsFbAuthenticated = !String.IsNullOrEmpty(viewModel.FacebookToken);
+                return viewModel;
             }
 
             if (_accountInput.Action == Action.Register)
