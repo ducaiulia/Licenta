@@ -29,6 +29,8 @@ namespace AllShare.Models.Builders
 
                 var viewModel = TinyMapper.Map<AccountViewModel>(result.Result);
                 viewModel.IsFbAuthenticated = !String.IsNullOrEmpty(viewModel.FacebookToken);
+                viewModel.IsTwitterAuthenticated = (!String.IsNullOrEmpty(viewModel.TwitterToken) &&
+                                                    !String.IsNullOrEmpty(viewModel.TwitterTokenSecret));
                 return viewModel;
             }
 

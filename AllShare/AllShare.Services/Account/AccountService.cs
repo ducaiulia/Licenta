@@ -49,5 +49,18 @@ namespace AllShare.Services.Account
                 return new ServiceResult<bool> { ResultType = ResultType.Error };
             }
         }
+
+        public ServiceResult<bool> SaveTwitterToken(string username, string token, string tokenSecret)
+        {
+            try
+            {
+                UserRepository.SaveTwitterToken(username, token, tokenSecret);
+                return new ServiceResult<bool>() {ResultType = ResultType.Success};
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResult<bool>() {ResultType = ResultType.Error};
+            }
+        }
     }
 }

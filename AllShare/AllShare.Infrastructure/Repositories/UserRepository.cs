@@ -60,5 +60,17 @@ namespace AllShare.Infrastructure.Repositories
 
             dbContext.SaveChanges();
         }
+
+        public void SaveTwitterToken(string username, string token, string tokenSecret)
+        {
+            var user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
+            if (user != null)
+            {
+                user.TwitterToken = token;
+                user.TwitterTokenSecret = tokenSecret;
+            }
+
+            dbContext.SaveChanges();
+        }
     }
 }

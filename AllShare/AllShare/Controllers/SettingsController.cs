@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using AllShare.Models;
 using AllShare.Services.Account;
+using AllShare.Services.Utils;
 using Facebook;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.StaticFactory;
+using TweetSharp;
 
 namespace AllShare.Controllers
 {
@@ -11,6 +16,10 @@ namespace AllShare.Controllers
     {
         [Dependency]
         public IAccountService AccountService { get; set; }
+
+        private static readonly string ConsumerKey = WebConfigurationManager.AppSettings["TwitterConsumerKey"];
+        private static readonly string ConsumerSecret = WebConfigurationManager.AppSettings["TwitterConsumerSecret"];
+        private static readonly string DomainName = WebConfigurationManager.AppSettings["DomainName"];
 
         public SettingsController(IAccountService accountService)
         {
@@ -66,8 +75,8 @@ namespace AllShare.Controllers
             var accessToken = result.access_token;
 
             Session["FacebookAccessToken"] = accessToken;
-            var user = (AccountViewModel)Session["User"];
-            AccountService.SaveFacebookToken(user.Username, accessToken);
+            var viewmodel = (AccountViewModel)Session["User"];
+            AccountService.SaveFacebookToken(viewmodel.Username, accessToken);
 
             fb.AccessToken = accessToken;
 
@@ -79,6 +88,36 @@ namespace AllShare.Controllers
                 client_secret = "361cb6f8902601caf3fcfe62e6134cba",
                 fb_exchange_token = accessToken
             });
+
+            return RedirectToAction("Index", "Settings");
+        }
+
+        public async Task<ActionResult> Twitter()
+        {
+            TwitterService service = new TwitterService(ConsumerKey, ConsumerSecret);
+            string url = String.Format("http://{0}/{1}", DomainName, Url.Action("TwitterCallback"));
+            OAuthRequestToken requestToken = service.GetRequestToken(url);
+
+            Uri uri = service.GetAuthorizationUri(requestToken);
+            return new RedirectResult(uri.ToString(), false);
+        }
+
+        public async Task<ActionResult> TwitterCallback(string oauth_token, string oauth_verifier)
+        {
+            var requestToken = new OAuthRequestToken { Token = oauth_token };
+
+            TwitterService service = new TwitterService(ConsumerKey, ConsumerSecret);
+
+            OAuthAccessToken accessToken = service.GetAccessToken(requestToken, oauth_verifier);
+
+            service.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
+            TwitterUser user = service.VerifyCredentials(new VerifyCredentialsOptions());
+
+            Session["TwitterAccessToken"] = accessToken.Token;
+            Session["TwitterAccessTokenSecret"] = accessToken.TokenSecret;
+            var viewmodel = (AccountViewModel)Session["User"];
+
+            AccountService.SaveTwitterToken(viewmodel.Username, accessToken.Token, accessToken.TokenSecret);
 
             return RedirectToAction("Index", "Settings");
         }

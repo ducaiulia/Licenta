@@ -26,6 +26,8 @@ namespace AllShare.Controllers
         // GET: Account
         public ActionResult Index()
         {
+            if(Session["User"] != null)
+                return Redirect(Url.Action("Index", "Home"));
             return View();
         }
         

@@ -18,6 +18,8 @@ namespace AllShare.App_Start
                 config.Bind(source => source.Password, target => target.Password);
                 config.Bind(source => source.Username, target => target.Username);
                 config.Bind(source => source.FacebookToken, target => target.FacebookToken);
+                config.Bind(source => source.TwitterToken, target => target.TwitterToken);
+                config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
             });
 
             TinyMapper.Bind<UserDTO, User>(config =>
@@ -25,12 +27,16 @@ namespace AllShare.App_Start
                 config.Bind(source => source.Password, target => target.Password);
                 config.Bind(source => source.Username, target => target.Username);
                 config.Bind(source => source.FacebookToken, target => target.FacebookToken);
+                config.Bind(source => source.TwitterToken, target => target.TwitterToken);
+                config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
             });
 
             TinyMapper.Bind<UserDTO, AccountViewModel>(config =>
             {
                 config.Bind(source => source.Username, target => target.Username);
                 config.Bind(source => source.FacebookToken, target => target.FacebookToken);
+                config.Bind(source => source.TwitterToken, target => target.TwitterToken);
+                config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
             });
 
             TinyMapper.Bind<AccountInput, UserDTO>(config =>

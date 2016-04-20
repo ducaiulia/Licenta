@@ -42,7 +42,14 @@
             if (Model.Account.IsFbAuthenticated)
             {
                 <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username')">
-                    <i class="step fi-social-facebook size-12"></i>
+                    <i class="step fi-social-facebook size-24"></i>
+                </a>
+            }
+
+            if (Model.Account.IsTwitterAuthenticated)
+            {
+                <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username')">
+                    <i class="step fi-social-twitter size-24"></i>
                 </a>
             }
         }

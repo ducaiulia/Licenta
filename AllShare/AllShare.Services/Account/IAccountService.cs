@@ -14,5 +14,7 @@ namespace AllShare.Services.Account
         ServiceResult<UserDTO> Register(UserDTO user);
 
         ServiceResult<bool> SaveFacebookToken(string username, string token);
+
+        ServiceResult<bool> SaveTwitterToken(string username, string token, string tokenSecret);
     }
 }

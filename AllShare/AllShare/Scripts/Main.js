@@ -13,5 +13,17 @@
             $('#myModal').foundation('reveal', 'open');
             setTimeout(SocialSpace.HideModal, 1500);
         });
+    },
+
+    SendTweet: function(text, username) {
+        $.ajax({
+            url: "/Social/SendTweet",
+            method: "POST",
+            data: { text: text, username: username }
+        }).success(function () {
+            console.log("success");
+            $('#myModal').foundation('reveal', 'open');
+            setTimeout(SocialSpace.HideModal, 1500);
+        });
     }
 };

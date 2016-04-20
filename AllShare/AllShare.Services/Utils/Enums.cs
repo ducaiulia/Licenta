@@ -17,4 +17,10 @@ namespace AllShare.Services.Utils
         Login = 0,
         Register
     };
+
+    public enum TokenSource
+    {
+        Facebook = 0,
+        Twitter
+    };
 }
