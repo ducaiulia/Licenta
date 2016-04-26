@@ -18,7 +18,7 @@ namespace AllShare.Controllers
         [HttpPost]
         public async Task FacebookPost(string text, string username)
         {
-            var description = text + " - @" + username;
+            var description = String.Format("{0} - {1}", text, username);
             var facebookClient = new Facebook.FacebookClient(Session["FacebookAccessToken"].ToString());
             var postParams = new { message = description };
 
@@ -37,7 +37,7 @@ namespace AllShare.Controllers
         [HttpPost]
         public async Task SendTweet(string text, string username)
         {
-            var description = text + " - @" + username;
+            var description = String.Format("{0} - {1}", text, username);
             TwitterService service = new TwitterService(ConsumerKey, ConsumerSecret);
 
             var viewModel = (AccountViewModel) Session["User"];

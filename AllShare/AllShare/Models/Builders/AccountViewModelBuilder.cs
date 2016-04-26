@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Helpers;
 using AllShare.Services.Account;
 using AllShare.Services.DTOs;
@@ -17,11 +18,11 @@ namespace AllShare.Models.Builders
             AccountService = accountService;
             _accountInput = input;
         }
-        public AccountViewModel Build()
+        public async Task<AccountViewModel> Build()
         {
             if (_accountInput.Action == Action.Login)
             {
-                var result = AccountService.GetUser(_accountInput.Username);
+                var result = await AccountService.GetUser(_accountInput.Username);
                 if (result.ResultType == ResultType.Error)
                     return null;
                 if (!Crypto.VerifyHashedPassword(result.Result.Password, _accountInput.Password))
@@ -38,7 +39,7 @@ namespace AllShare.Models.Builders
             {
                 _accountInput.Password = Crypto.HashPassword(_accountInput.Password);
                 var dto = TinyMapper.Map<UserDTO>(_accountInput);
-                var result = AccountService.Register(dto);
+                var result = await AccountService.Register(dto);
                 if (result.ResultType == ResultType.Error)
                     return null;
                 return TinyMapper.Map<AccountViewModel>(result.Result);

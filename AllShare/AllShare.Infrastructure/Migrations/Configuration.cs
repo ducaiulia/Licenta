@@ -16,13 +16,13 @@ namespace AllShare.Infrastructure.Migrations
 
         protected override void Seed(AllShare.Infrastructure.DatabaseEngine.ApplicationDbContext context)
         {
-            context.Users.Add(new User
-            {
-                FirstName = "Iulia",
-                LastName = "Duca",
-                Password = "pass",
-                Username = "ducaiulia"
-            });
+            //context.Users.Add(new User
+            //{
+            //    FirstName = "Iulia",
+            //    LastName = "Duca",
+            //    Password = "pass",
+            //    Username = "ducaiulia"
+            //});
             base.Seed(context);
             //  This method will be called after migrating to the latest version.
 

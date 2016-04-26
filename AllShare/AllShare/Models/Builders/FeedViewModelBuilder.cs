@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using AllShare.Services.NewsFeed;
 using AllShare.Services.Utils;
@@ -17,7 +18,7 @@ namespace AllShare.Models.Builders
             _newsFeedService = newsFeedService;
         }
 
-        public NewsFeedViewModel Build()
+        public async Task<NewsFeedViewModel> Build()
         {
             var viewModel = new NewsFeedViewModel();
             var result = _newsFeedService.GetAllPosts();

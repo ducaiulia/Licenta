@@ -31,6 +31,11 @@ namespace AllShare.App_Start
                 config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
             });
 
+            TinyMapper.Bind<OnlineUser, UserDTO>(config =>
+            {
+                config.Bind(source => source.Username, target => target.Username);
+            });
+
             TinyMapper.Bind<UserDTO, AccountViewModel>(config =>
             {
                 config.Bind(source => source.Username, target => target.Username);

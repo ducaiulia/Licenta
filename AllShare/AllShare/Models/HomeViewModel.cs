@@ -9,5 +9,6 @@ namespace AllShare.Models
     {
         public AccountViewModel Account { get; set; }
         public NewsFeedViewModel NewsFeed { get; set; }
+        public OnlineUsersViewModel OnlineUsers { get; set; }
     }
 }

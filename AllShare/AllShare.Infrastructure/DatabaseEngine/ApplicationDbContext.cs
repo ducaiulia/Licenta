@@ -10,6 +10,7 @@ namespace AllShare.Infrastructure.DatabaseEngine
 
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<OnlineUser> OnlineUsers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

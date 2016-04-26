@@ -8,6 +8,6 @@ namespace AllShare.Models.Builders
 {
     public interface IViewModelBuilder<T>
     {
-        T Build();
+        Task<T> Build();
     }
 }

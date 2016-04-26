@@ -6,8 +6,11 @@ using AllShare.Models.Builders;
 using AllShare.Services.Account;
 using AllShare.Services.DTOs;
 using AllShare.Services.NewsFeed;
+using AllShare.Services.User;
+using HandlebarsDotNet;
 using Microsoft.Practices.Unity;
 using Nelibur.ObjectMapper;
+using Newtonsoft.Json;
 
 namespace AllShare.Controllers
 {
@@ -17,21 +20,42 @@ namespace AllShare.Controllers
         public IAccountService AccountService { get; set; }
         [Dependency]
         public INewsFeedService NewsFeedService { get; set; }
+        [Dependency]
+        public IUserService UserService { get; set; }
 
-        public HomeController(IAccountService accountService, INewsFeedService newsFeedService)
+        public HomeController(IAccountService accountService, INewsFeedService newsFeedService, IUserService userService)
         {
             AccountService = accountService;
             NewsFeedService = newsFeedService;
+            UserService = userService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            if (Session["User"] == null)
+                return Redirect(Url.Action("Index", "Account"));
+
             var viewModel = new HomeViewModel();
 
             viewModel.Account = (AccountViewModel)Session["User"];
-            viewModel.NewsFeed = new FeedViewModelBuilder(NewsFeedService).Build();
+            viewModel.NewsFeed = await new FeedViewModelBuilder(NewsFeedService).Build();
+            viewModel.OnlineUsers = await new OnlineUsersViewModelBuilder(UserService, viewModel.Account).Build();
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<string> GetOnlineUsers()
+        {
+            string source = "{{#if Users}}{{#each Users}}<small>{{this}}</small><br/>{{/each}}{{else}}<small>No online users.</small>{{/if}}";
+
+            var template = Handlebars.Compile(source);
+            
+            var onlineUsers = await new OnlineUsersViewModelBuilder(UserService, (AccountViewModel)Session["User"]).Build();
+            
+            var json = JsonConvert.SerializeObject(template(onlineUsers));
+
+            return json.Replace('\"', ' ');
         }
 
         public ActionResult About()

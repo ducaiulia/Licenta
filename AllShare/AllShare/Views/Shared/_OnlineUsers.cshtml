@@ -1,0 +1,14 @@
+﻿@model AllShare.Models.OnlineUsersViewModel
+
+@if (Model == null || Model.Users == null || Model.Users.Count == 0)
+{
+    <small>No online users.</small>
+}
+else
+{
+    foreach (var user in Model.Users)
+    {
+        <small>@user</small>
+        <br/>
+    }
+}

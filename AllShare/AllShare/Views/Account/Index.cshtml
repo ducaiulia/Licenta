@@ -10,7 +10,7 @@
         </ul>
         <div class="tabs-content">
             <div class="content active" id="login" style="background-color: white">
-                @using (Ajax.BeginForm("Login", new AjaxOptions { HttpMethod = "POST" }))
+                @using (Ajax.BeginForm("Login", new AjaxOptions {HttpMethod = "POST", OnFailure = "SocialSpace.OnSuccess"}))
                 {
                     <div class="row">
                         <div class="small-8 small-centered columns">
@@ -28,7 +28,7 @@
                 }
             </div>
             <div class="content" id="register" style="background-color: white">
-                @using (Ajax.BeginForm("Register", new AjaxOptions {HttpMethod = "POST"}))
+                @using (Ajax.BeginForm("Register", new AjaxOptions {HttpMethod = "POST", OnFailure = "SocialSpace.OnSuccess"}))
                 {
                     <div class="row">
                         <div class="small-8 small-centered columns">
@@ -41,6 +41,21 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="small-8 small-centered columns">
+                            <input type="text" placeholder="First Name" name="FirstName" style="border-radius: 10px"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-8 small-centered columns">
+                            <input type="text" placeholder="Last Name" name="LastName" style="border-radius: 10px"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-8 small-centered columns">
+                            <input type="text" placeholder="Email" name="Email" style="border-radius: 10px"/>
+                        </div>
+                    </div>
+                    <div class="row">
                         <button type="submit" class="button small radius right">Register</button>
                     </div>
                 }
@@ -48,3 +63,27 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/signalrHubs")
+    <script src="~/signalr/hubs"></script>
+    @Scripts.Render("~/bundles/allshare")
+
+    <script>
+        $(function() {
+            var userHub = $.connection.userHub;
+            $.connection.hub.start().done(function() {
+                userHub.server.updateOnlineUsers();
+            });
+
+            userHub.client.updateOnlineUsersMessage = function() {
+                $.ajax({
+                    url: "/Home/GetOnlineUsers",
+                    method: "POST"
+                }).success(function(users) {
+                    $("#onlineUsers").html(users);
+                });
+            };
+        });
+    </script>
+}

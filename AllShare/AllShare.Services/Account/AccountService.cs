@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AllShare.Core.Domain;
 using AllShare.Core.Repositories;
 using AllShare.Services.DTOs;
@@ -11,30 +12,47 @@ namespace AllShare.Services.Account
     public class AccountService: IAccountService
     {
         private IUserRepository UserRepository { get; set; }
-        public AccountService(IUserRepository userRepository)
+        private IOnlineUserRepository OnlineUserRepository { get; set; }
+        public AccountService(IUserRepository userRepository, IOnlineUserRepository onlineUserRepository)
         {
             UserRepository = userRepository;
+            OnlineUserRepository = onlineUserRepository;
         }
 
-        public ServiceResult<UserDTO> GetUser(string username)
+        public async Task<ServiceResult<UserDTO>> GetUser(string username)
         {
             var user = UserRepository.GetUser(username);
-            var result = new ServiceResult<UserDTO> {ResultType = user != null ? ResultType.Success : ResultType.Error, Result = TinyMapper.Map<UserDTO>(user) };
-            return result;
+            if (user != null)
+            {
+                await OnlineUserRepository.Login(username);
+                return new ServiceResult<UserDTO>
+                {
+                    ResultType = ResultType.Success,
+                    Result = TinyMapper.Map<UserDTO>(user)
+                };
+            }
+
+            return new ServiceResult<UserDTO> {ResultType = ResultType.Error};
         }
 
-        public ServiceResult<UserDTO> Register(UserDTO userDto)
+        public async Task<ServiceResult<UserDTO>> Register(UserDTO userDto)
         {
-            var user = TinyMapper.Map<User>(userDto);
+            var user = TinyMapper.Map<Core.Domain.User>(userDto);
             try
             {
                 var newUser = UserRepository.Add(user);
+                await OnlineUserRepository.Login(newUser.Username);
                 return new ServiceResult<UserDTO> {ResultType = ResultType.Success, Result = TinyMapper.Map<UserDTO>(newUser)};
             }
             catch (Exception ex)
             {
                 return new ServiceResult<UserDTO> {ResultType = ResultType.Error};   
             }
+        }
+
+        public async Task Logout(string username)
+        {
+            await OnlineUserRepository.Logout(username);
         }
 
         public ServiceResult<bool> SaveFacebookToken(string username, string token)

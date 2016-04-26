@@ -34,10 +34,10 @@ namespace AllShare.Controllers
         #region Account Methods
 
         [HttpPost]
-        public ActionResult Login(AccountInput account)
+        public async Task<ActionResult> Login(AccountInput account)
         {
             account.Action = Action.Login;
-            var viewModel = new AccountViewModelBuilder(AccountService, account).Build();
+            var viewModel = await new AccountViewModelBuilder(AccountService, account).Build();
 
             if (viewModel != null)
             {
@@ -49,18 +49,20 @@ namespace AllShare.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(AccountInput account)
+        public async Task<ActionResult> Register(AccountInput account)
         {
             account.Action = Action.Register;
-            var viewModel = new AccountViewModelBuilder(AccountService, account).Build();
+            var viewModel = await new AccountViewModelBuilder(AccountService, account).Build();
             if (viewModel != null)
                 Session["User"] = viewModel;
                 return Redirect(Url.Action("Index", "Home"));
         }
 
-        public ActionResult Logout()
+        public async Task<ActionResult> Logout()
         {
+            var user = (AccountViewModel)Session["User"];
             Session["User"] = null;
+            await AccountService.Logout(user.Username);
             return RedirectToAction("Index", "Account");
         }
 

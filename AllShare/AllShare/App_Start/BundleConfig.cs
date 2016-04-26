@@ -20,7 +20,14 @@ namespace AllShare
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/allshare").Include(
-                        "~/Scripts/Main.js"));
+                        "~/Scripts/Main.js",
+                        "~/Scripts/handlebars-v4.0.5.js",
+                        "~/Scripts/handlebars.runtime-v4.0.5.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalrHubs").Include(
+                        "~/Scripts/jquery.signalR-{version}.js"));
+
 
             #region Foundation Bundles
 

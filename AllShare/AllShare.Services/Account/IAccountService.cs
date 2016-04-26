@@ -9,9 +9,11 @@ namespace AllShare.Services.Account
 {
     public interface IAccountService
     {
-        ServiceResult<UserDTO> GetUser(string username);
+        Task<ServiceResult<UserDTO>> GetUser(string username);
 
-        ServiceResult<UserDTO> Register(UserDTO user);
+        Task<ServiceResult<UserDTO>> Register(UserDTO user);
+
+        Task Logout(string username);
 
         ServiceResult<bool> SaveFacebookToken(string username, string token);
 

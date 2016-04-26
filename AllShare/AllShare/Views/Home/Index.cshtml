@@ -19,41 +19,45 @@
         </a>
     </div>
 </div>
-
 <div class="row">
-    <h2>Welcome, @Model.Account.Username !</h2>
-    @using (Ajax.BeginForm("Post", "Home", new AjaxOptions {HttpMethod = "POST"}))
-    {
-        <textarea placeholder="Your text..." name="Text"></textarea>
-        <button type="submit">Add Post</button>
-    }
-
-    @if (@Model.NewsFeed.Posts == null || @Model.NewsFeed.Posts.Count == 0)
-    {
-        <h4>No Posts yet.</h4>
-    }
-    else
-    {
-        foreach (var post in Model.NewsFeed.Posts)
+    <div class="small-10 columns">
+        <h2>Welcome, @Model.Account.Username !</h2>
+        @using (Ajax.BeginForm("Post", "Home", new AjaxOptions { HttpMethod = "POST" }))
         {
-            <h5>@post.Text</h5>
-            <p>@post.User.Username</p>
-            <small>@post.DateTime</small>
-            if (Model.Account.IsFbAuthenticated)
-            {
-                <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username')">
-                    <i class="step fi-social-facebook size-24"></i>
-                </a>
-            }
+            <textarea placeholder="Your text..." name="Text"></textarea>
+            <button type="submit">Add Post</button>
+        }
 
-            if (Model.Account.IsTwitterAuthenticated)
+        @if (@Model.NewsFeed.Posts == null || @Model.NewsFeed.Posts.Count == 0)
+        {
+            <h4>No Posts yet.</h4>
+        }
+        else
+        {
+            foreach (var post in Model.NewsFeed.Posts)
             {
-                <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username')">
-                    <i class="step fi-social-twitter size-24"></i>
-                </a>
+                <h5>@post.Text</h5>
+                <p>@post.User.Username</p>
+                <small>@post.DateTime</small>
+                if (Model.Account.IsFbAuthenticated)
+                {
+                    <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username')">
+                        <i class="step fi-social-facebook size-24"></i>
+                    </a>
+                }
+
+                if (Model.Account.IsTwitterAuthenticated)
+                {
+                    <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username')">
+                        <i class="step fi-social-twitter size-24"></i>
+                    </a>
+                }
             }
         }
-    }
+    </div>
+    <div class="small-2 columns" id="onlineUsers">
+        @Html.Partial("_OnlineUsers", Model.OnlineUsers)
+    </div>
 </div>
 
 <div id="myModal" class="tiny reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
@@ -62,5 +66,26 @@
 <div class="reveal-modal-bg" style="position: fixed"></div>
 
 @section scripts{
+    @Scripts.Render("~/bundles/signalrHubs")
+    <script src="~/signalr/hubs"></script>
     @Scripts.Render("~/bundles/allshare")
+
+<script>
+    $(function () {
+        var userHub = $.connection.userHub;
+        $.connection.hub.start().done(function () {
+            userHub.server.updateOnlineUsers();
+        });
+
+        userHub.client.updateOnlineUsersMessage = function () {
+            $.ajax({
+                url: "/Home/GetOnlineUsers",
+                method: "POST"
+            }).success(function (users) {
+                $("#onlineUsers").html(users);
+            });
+        };
+    });
+</script>
 }
+
