@@ -81,5 +81,15 @@ namespace AllShare.Controllers
             NewsFeedService.AddPost(dto);
             return Redirect(Url.Action("Index", "Home"));
         }
+
+        public async Task LogOutOnUnload()
+        {
+            if (Session["User"] != null)
+            {
+                var user = (AccountViewModel)Session["User"];
+                Session["User"] = null;
+                await AccountService.Logout(user.Username);
+            }
+        }
     }
 }

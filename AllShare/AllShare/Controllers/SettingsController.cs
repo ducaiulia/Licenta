@@ -43,6 +43,9 @@ namespace AllShare.Controllers
         // GET: Settings
         public ActionResult Index()
         {
+            if (Session["User"] == null)
+                return Redirect(Url.Action("Index", "Account"));
+
             return View();
         }
 
@@ -120,6 +123,16 @@ namespace AllShare.Controllers
             AccountService.SaveTwitterToken(viewmodel.Username, accessToken.Token, accessToken.TokenSecret);
 
             return RedirectToAction("Index", "Settings");
+        }
+
+        public async Task LogOutOnUnload()
+        {
+            if (Session["User"] != null)
+            {
+                var user = (AccountViewModel)Session["User"];
+                Session["User"] = null;
+                await AccountService.Logout(user.Username);
+            }
         }
     }
 }

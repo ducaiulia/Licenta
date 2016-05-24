@@ -61,8 +61,11 @@ namespace AllShare.Controllers
         public async Task<ActionResult> Logout()
         {
             var user = (AccountViewModel)Session["User"];
-            Session["User"] = null;
-            await AccountService.Logout(user.Username);
+            if (user != null)
+            {
+                Session["User"] = null;
+                await AccountService.Logout(user.Username);
+            }
             return RedirectToAction("Index", "Account");
         }
 

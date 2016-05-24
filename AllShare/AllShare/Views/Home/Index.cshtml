@@ -86,6 +86,26 @@
             });
         };
     });
+
+    var doAjaxBeforeUnloadEnabled = true;
+    var doAjaxBeforeUnload = function (evt) {
+        if (!doAjaxBeforeUnloadEnabled) {
+            return;
+        }
+        doAjaxBeforeUnloadEnabled = false;
+        jQuery.ajax({
+            url: "/Home/LogOutOnUnload/",
+            success: function (a) {
+                console.debug("Ajax call finished");
+            },
+            async: false
+        });
+    }
+
+    $(document).ready(function () {
+        window.onbeforeunload = doAjaxBeforeUnload;
+        $(window).unload(doAjaxBeforeUnload);
+    });
 </script>
 }
 
