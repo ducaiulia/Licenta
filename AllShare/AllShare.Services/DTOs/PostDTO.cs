@@ -12,5 +12,7 @@ namespace AllShare.Services.DTOs
         public string Text { get; set; }
         public DateTime DateTime { get; set; }
         public UserDTO User { get; set; }
+        public bool IsFile { get; set; }
+        public string ImagePath { get; set; }
     }
 }

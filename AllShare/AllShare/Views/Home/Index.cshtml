@@ -22,9 +22,13 @@
 <div class="row">
     <div class="small-10 columns">
         <h2>Welcome, @Model.Account.Username !</h2>
-        @using (Ajax.BeginForm("Post", "Home", new AjaxOptions { HttpMethod = "POST" }))
+        @using (Ajax.BeginForm("Post", "Home", new AjaxOptions { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
         {
             <textarea placeholder="Your text..." name="Text"></textarea>
+            
+            <a href="#" onclick="performClick('imagePath');">Choose photo</a>
+            <input type="file" name="file" id="imagePath"/>
+
             <button type="submit">Add Post</button>
         }
 
@@ -37,18 +41,22 @@
             foreach (var post in Model.NewsFeed.Posts)
             {
                 <h5>@post.Text</h5>
+                if (post.IsFile)
+                {
+                    <img src="@post.ImagePath"/>
+                }
                 <p>@post.User.Username</p>
                 <small>@post.DateTime</small>
                 if (Model.Account.IsFbAuthenticated)
                 {
-                    <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username')">
+                    <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
                         <i class="step fi-social-facebook size-24"></i>
                     </a>
                 }
 
                 if (Model.Account.IsTwitterAuthenticated)
                 {
-                    <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username')">
+                    <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
                         <i class="step fi-social-twitter size-24"></i>
                     </a>
                 }
@@ -70,42 +78,51 @@
     <script src="~/signalr/hubs"></script>
     @Scripts.Render("~/bundles/allshare")
 
-<script>
-    $(function () {
-        var userHub = $.connection.userHub;
-        $.connection.hub.start().done(function () {
-            userHub.server.updateOnlineUsers();
-        });
-
-        userHub.client.updateOnlineUsersMessage = function () {
-            $.ajax({
-                url: "/Home/GetOnlineUsers",
-                method: "POST"
-            }).success(function (users) {
-                $("#onlineUsers").html(users);
+    <script>
+        $(function() {
+            var userHub = $.connection.userHub;
+            $.connection.hub.start().done(function() {
+                userHub.server.updateOnlineUsers();
             });
-        };
-    });
 
-    var doAjaxBeforeUnloadEnabled = true;
-    var doAjaxBeforeUnload = function (evt) {
-        if (!doAjaxBeforeUnloadEnabled) {
-            return;
-        }
-        doAjaxBeforeUnloadEnabled = false;
-        jQuery.ajax({
-            url: "/Home/LogOutOnUnload/",
-            success: function (a) {
-                console.debug("Ajax call finished");
-            },
-            async: false
+            userHub.client.updateOnlineUsersMessage = function() {
+                $.ajax({
+                    url: "/Home/GetOnlineUsers",
+                    method: "POST"
+                }).success(function(users) {
+                    $("#onlineUsers").html(users);
+                });
+            };
         });
-    }
 
-    $(document).ready(function () {
-        window.onbeforeunload = doAjaxBeforeUnload;
-        $(window).unload(doAjaxBeforeUnload);
-    });
-</script>
+        //var doAjaxBeforeUnloadEnabled = true;
+        //var doAjaxBeforeUnload = function(evt) {
+        //    if (!doAjaxBeforeUnloadEnabled) {
+        //        return;
+        //    }
+        //    doAjaxBeforeUnloadEnabled = false;
+        //    jQuery.ajax({
+        //        url: "/Home/LogOutOnUnload/",
+        //        success: function(a) {
+        //            console.debug("Ajax call finished");
+        //        },
+        //        async: false
+        //    });
+        //}
+
+        //$(document).ready(function() {
+        //    window.onbeforeunload = doAjaxBeforeUnload;
+        //    $(window).unload(doAjaxBeforeUnload);
+        //});
+
+        function performClick(elemId) {
+            var elem = document.getElementById(elemId);
+            if (elem && document.createEvent) {
+                var evt = document.createEvent("MouseEvents");
+                evt.initEvent("click", true, false);
+                elem.dispatchEvent(evt);
+            }
+        }
+    </script>
 }
 

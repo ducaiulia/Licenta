@@ -10,5 +10,8 @@ namespace AllShare.Models
         public string Text { get; set; }
         public DateTime DateTime { get; set; }
         public AccountViewModel User { get; set; }
+        public HttpPostedFileBase File { get; set; }
+        public bool IsFile { get; set; }
+        public string ImagePath { get; set; }
     }
 }

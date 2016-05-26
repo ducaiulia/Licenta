@@ -3,11 +3,11 @@
         $('#myModal').foundation('reveal', 'close');
     },
 
-    PostOnFacebook: function(text, username) {
+    PostOnFacebook: function(text, username, imagePath) {
         $.ajax({
             url: "/Social/FacebookPost",
             method: "POST",
-            data: { text: text, username: username }
+            data: { text: text, username: username, imagePath: imagePath}
         }).success(function() {
             console.log("success");
             $('#myModal').foundation('reveal', 'open');
@@ -15,11 +15,11 @@
         });
     },
 
-    SendTweet: function(text, username) {
+    SendTweet: function(text, username, imagePath) {
         $.ajax({
             url: "/Social/SendTweet",
             method: "POST",
-            data: { text: text, username: username }
+            data: { text: text, username: username, imagePath: imagePath}
         }).success(function () {
             console.log("success");
             $('#myModal').foundation('reveal', 'open');

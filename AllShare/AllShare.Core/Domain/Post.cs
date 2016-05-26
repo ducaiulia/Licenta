@@ -11,5 +11,7 @@ namespace AllShare.Core.Domain
         public DateTime DateTime { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public bool IsFile { get; set; }
+        public string ImagePath { get; set; }
     }
 }

@@ -55,6 +55,8 @@ namespace AllShare.App_Start
                 config.Bind(source => source.Text, target => target.Text);
                 config.Bind(source => source.DateTime, target => target.DateTime);
                 config.Bind(source => source.User, target => target.User);
+                config.Bind(source => source.ImagePath, target => target.ImagePath);
+                config.Bind(source => source.IsFile, target => target.IsFile);
             });
 
             TinyMapper.Bind<PostDTO, PostViewModel>(config =>

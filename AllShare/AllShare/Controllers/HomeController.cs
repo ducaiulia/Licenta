@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AllShare.Models;
 using AllShare.Models.Builders;
@@ -7,6 +10,8 @@ using AllShare.Services.Account;
 using AllShare.Services.DTOs;
 using AllShare.Services.NewsFeed;
 using AllShare.Services.User;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using HandlebarsDotNet;
 using Microsoft.Practices.Unity;
 using Nelibur.ObjectMapper;
@@ -36,6 +41,10 @@ namespace AllShare.Controllers
                 return Redirect(Url.Action("Index", "Account"));
 
             var viewModel = new HomeViewModel();
+
+            //viewModel.Account.FacebookToken = (string) Session["FacebookAccessToken"];
+            //viewModel.Account.TwitterToken = (string)(Session["TwitterAccessToken"] ?? null);
+            //viewModel.Account.TwitterTokenSecret = (string)(Session["TwitterAccessTokenSecret"] ?? null);
 
             viewModel.Account = (AccountViewModel)Session["User"];
             viewModel.NewsFeed = await new FeedViewModelBuilder(NewsFeedService).Build();
@@ -76,6 +85,30 @@ namespace AllShare.Controllers
             model.DateTime = DateTime.Now;
             model.User = (AccountViewModel) Session["User"];
 
+            if (model.File != null)
+            {
+                string pic = System.IO.Path.GetFileName(model.File.FileName);
+                string path = System.IO.Path.Combine(
+                    Server.MapPath("~/uploadImages"), pic);
+                
+                model.File.SaveAs(path);
+                
+                Account account = new Account("djwta3alu", "914135166579935", "uyWwvUtLoS1W0PwPJFOcw5S2Xps");
+                var cloudinary = new Cloudinary(account);
+
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(System.IO.Path.Combine(Server.MapPath("~/uploadImages"), pic))
+                };
+
+                var uploadResult = cloudinary.Upload(uploadParams);
+                if (uploadResult.StatusCode == HttpStatusCode.OK)
+                {
+                    model.ImagePath = uploadResult.Uri.AbsoluteUri;
+                    model.IsFile = true;
+                }
+            }
+
             var dto = TinyMapper.Map<PostDTO>(model);
 
             NewsFeedService.AddPost(dto);
@@ -91,5 +124,33 @@ namespace AllShare.Controllers
                 await AccountService.Logout(user.Username);
             }
         }
+
+    //    public async Task<ActionResult> Upload(HttpPostedFileBase file)
+    //    {
+
+    //        if (file != null)
+    //        {
+    //            string pic = System.IO.Path.GetFileName(file.FileName);
+    //            string path = System.IO.Path.Combine(
+    //                Server.MapPath("~/uploadImages"), pic);
+    //            // file is uploaded
+    //            file.SaveAs(path);
+
+
+    //            Account account = new Account("djwta3alu", "914135166579935", "uyWwvUtLoS1W0PwPJFOcw5S2Xps");
+    //            var cloudinary = new Cloudinary(account);
+
+    //            var uploadParams = new ImageUploadParams()
+    //            {
+    //                File = new FileDescription(System.IO.Path.Combine(Server.MapPath("~/uploadImages"), pic))
+    //            };
+
+    //            var uploadResult = cloudinary.Upload(uploadParams);
+    //            if (uploadResult.StatusCode == HttpStatusCode.OK)
+    //            {
+                    
+    //            }
+    //        }
+    //    }
     }
 }

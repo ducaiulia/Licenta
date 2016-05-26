@@ -14,7 +14,7 @@ namespace AllShare.Infrastructure.Repositories
         {
             using (var dbContext = new ApplicationDbContext())
             {
-                return dbContext.Posts.Include(p => p.User).OrderBy(p => p.DateTime).ToList();
+                return dbContext.Posts.Include(p => p.User).OrderByDescending(p => p.DateTime).ToList();
             }
         }
 
