@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -49,6 +50,7 @@ namespace AllShare.Controllers
             viewModel.Account = (AccountViewModel)Session["User"];
             viewModel.NewsFeed = await new FeedViewModelBuilder(NewsFeedService).Build();
             viewModel.OnlineUsers = await new OnlineUsersViewModelBuilder(UserService, viewModel.Account).Build();
+            viewModel.Today = DateTime.Now.ToString("g", DateTimeFormatInfo.InvariantInfo);
 
             return View(viewModel);
         }
@@ -80,6 +82,7 @@ namespace AllShare.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Post(PostViewModel model)
         {
             model.DateTime = DateTime.Now;
@@ -124,33 +127,5 @@ namespace AllShare.Controllers
                 await AccountService.Logout(user.Username);
             }
         }
-
-    //    public async Task<ActionResult> Upload(HttpPostedFileBase file)
-    //    {
-
-    //        if (file != null)
-    //        {
-    //            string pic = System.IO.Path.GetFileName(file.FileName);
-    //            string path = System.IO.Path.Combine(
-    //                Server.MapPath("~/uploadImages"), pic);
-    //            // file is uploaded
-    //            file.SaveAs(path);
-
-
-    //            Account account = new Account("djwta3alu", "914135166579935", "uyWwvUtLoS1W0PwPJFOcw5S2Xps");
-    //            var cloudinary = new Cloudinary(account);
-
-    //            var uploadParams = new ImageUploadParams()
-    //            {
-    //                File = new FileDescription(System.IO.Path.Combine(Server.MapPath("~/uploadImages"), pic))
-    //            };
-
-    //            var uploadResult = cloudinary.Upload(uploadParams);
-    //            if (uploadResult.StatusCode == HttpStatusCode.OK)
-    //            {
-                    
-    //            }
-    //        }
-    //    }
     }
 }

@@ -10,7 +10,9 @@ namespace AllShare
                        "~/Content/foundation/foundation.css",
                        "~/Content/foundation/foundation.mvc.css",
                        "~/Content/foundation/foundation-icons.css",
-                       "~/Content/foundation/app.css");
+                       "~/Content/foundation/app.css",
+                       "~/Content/foundation-datepicker.css",
+                       "~/Content/foundation-select.css");
         }
 
         public static Bundle Scripts()
@@ -20,7 +22,9 @@ namespace AllShare
                       "~/Scripts/jquery.cookie.js",
                       "~/Scripts/foundation/foundation.js",
                       "~/Scripts/foundation/foundation.*",
-                      "~/Scripts/foundation/app.js");
+                      "~/Scripts/foundation/app.js",
+                      "~/Scripts/foundation-datepicker.js",
+                      "~/Scripts/foundation-select.js");
         }
     }
 }

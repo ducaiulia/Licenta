@@ -1,4 +1,5 @@
-﻿
+﻿@using System.Globalization
+@model AllShare.Models.SettingsViewModel
 @{
     ViewBag.Title = "Settings";
 }
@@ -22,18 +23,58 @@
 </div>
 <div class="row">
     <h2>Settings</h2>
-    <p>Log in with Facebook</p>
-    <a class="item" href="@Url.Action("Facebook", "Settings")">
-        <i class="step fi-social-facebook size-36"></i>
-    </a>
-
-    <p>Log in with Facebook</p>
-    <a class="item" href="@Url.Action("Twitter", "Settings")">
-        <i class="step fi-social-twitter size-36"></i>
-    </a>
+    <div class="small-6 columns">
+        <p>Log in with Facebook</p>
+        <a class="item" href="@Url.Action("Facebook", "Settings")">
+            <i class="step fi-social-facebook size-36"></i>
+        </a>
+    </div>
+    <div class="small-6 columns">
+        <p>Log in with Twitter</p>
+        <a class="item" href="@Url.Action("Twitter", "Settings")">
+            <i class="step fi-social-twitter size-36"></i>
+        </a>
+    </div>
 </div>
 
-
+<div class="row">
+    <h3>Scheduled post</h3>
+    @if (Model.Jobs != null && Model.Jobs.Count > 0)
+    {
+        <table>
+            <thead>
+            <tr>
+                <td>#</td>
+                <td>Description</td>
+                <td>Image Source</td>
+                <td>Author</td>
+                <td>Share to</td>
+                <td>Scheduled date</td>
+                <td>Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var job in Model.Jobs)
+            {
+                <tr>
+                    <td>@job.Id</td>
+                    <td>@job.Text</td>
+                    <td width="250">@job.ImagePath</td>
+                    <td>@job.AuthorUsername</td>
+                    <td>Facebook</td>
+                    @*<td>@(job.IsFacebook ? "Facebook" : "Twitter")</td>*@
+                    <td>@job.ToBeRunAt.ToString("g", DateTimeFormatInfo.InvariantInfo)</td>
+                    <td><button class="button alert">Delete</button></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h5>You currently don't have any scheduled jobs.</h5>
+    }
+</div>
 @*<script>
     var doAjaxBeforeUnloadEnabled = true;
     var doAjaxBeforeUnload = function (evt) {

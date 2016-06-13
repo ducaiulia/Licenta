@@ -12,6 +12,7 @@ namespace AllShare.Core.Domain
         public string Username { get; set; }
         public string Password { get; set; }
         public ICollection<Post> Posts { get; set; }
+        public ICollection<SharePostJobModel> Jobs { get; set; }
         public string FacebookToken { get; set; }
         public string TwitterToken { get; set; }
         public string TwitterTokenSecret { get; set; }

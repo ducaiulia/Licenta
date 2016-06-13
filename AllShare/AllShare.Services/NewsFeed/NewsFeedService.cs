@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AllShare.Core.Domain;
 using AllShare.Core.Repositories;
+using AllShare.Infrastructure.Repositories;
 using AllShare.Services.DTOs;
 using AllShare.Services.Utils;
 using Nelibur.ObjectMapper;

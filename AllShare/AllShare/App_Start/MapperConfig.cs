@@ -20,6 +20,7 @@ namespace AllShare.App_Start
                 config.Bind(source => source.FacebookToken, target => target.FacebookToken);
                 config.Bind(source => source.TwitterToken, target => target.TwitterToken);
                 config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
+                config.Bind(source => source.Id, target => target.UserId);
             });
 
             TinyMapper.Bind<UserDTO, User>(config =>
@@ -29,6 +30,7 @@ namespace AllShare.App_Start
                 config.Bind(source => source.FacebookToken, target => target.FacebookToken);
                 config.Bind(source => source.TwitterToken, target => target.TwitterToken);
                 config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
+                config.Bind(source => source.UserId, target => target.Id);
             });
 
             TinyMapper.Bind<OnlineUser, UserDTO>(config =>
@@ -42,6 +44,7 @@ namespace AllShare.App_Start
                 config.Bind(source => source.FacebookToken, target => target.FacebookToken);
                 config.Bind(source => source.TwitterToken, target => target.TwitterToken);
                 config.Bind(source => source.TwitterTokenSecret, target => target.TwitterTokenSecret);
+                config.Bind(source => source.UserId, target => target.UserId);
             });
 
             TinyMapper.Bind<AccountInput, UserDTO>(config =>
@@ -64,6 +67,17 @@ namespace AllShare.App_Start
                 config.Bind(source => source.Text, target => target.Text);
                 config.Bind(source => source.DateTime, target => target.DateTime);
                 config.Bind(source => source.User, target => target.User);
+            });
+
+            TinyMapper.Bind<SharePostJobModel, JobDTO>(config =>
+            {
+                config.Bind(source => source.Id, target => target.Id);
+                config.Bind(source => source.ImagePath, target => target.ImagePath);
+                config.Bind(source => source.AuthorUsername, target => target.AuthorUsername);
+                config.Bind(source => source.IsFacebook, target => target.IsFacebook);
+                config.Bind(source => source.IsTwitter, target => target.IsTwitter);
+                config.Bind(source => source.ToBeRunAt, target => target.ToBeRunAt);
+                config.Bind(source => source.Text, target => target.Text);
             });
         }
     }

@@ -51,8 +51,10 @@
   <ItemGroup>
     <Compile Include="Domain\OnlineUser.cs" />
     <Compile Include="Domain\Post.cs" />
+    <Compile Include="Domain\SharePostJobModel.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IJobRepository.cs" />
     <Compile Include="Repositories\IOnlineUserRepository.cs" />
     <Compile Include="Repositories\IPostRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />

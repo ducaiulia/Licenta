@@ -13,5 +13,6 @@ namespace AllShare.Services.DTOs
         public string FacebookToken { get; set; }
         public string TwitterToken { get; set; }
         public string TwitterTokenSecret { get; set; }
+        public int UserId { get; set; }
     }
 }

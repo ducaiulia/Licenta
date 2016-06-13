@@ -71,6 +71,14 @@
       <Project>{35186f98-0cf0-44b4-9316-d5d7efab7aaf}</Project>
       <Name>AllShare.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AllShare.Services\AllShare.Services.csproj">
+      <Project>{22aa5b6e-a0e1-42f6-9891-e2d0d82b4b95}</Project>
+      <Name>AllShare.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AllShare\AllShare.csproj">
+      <Project>{f41266e9-ef71-44b2-8ae7-4b32312cd8b1}</Project>
+      <Name>AllShare</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

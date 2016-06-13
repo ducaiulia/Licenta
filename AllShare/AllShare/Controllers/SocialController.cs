@@ -1,116 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using AllShare.Models;
-using TweetSharp;
+using AllShare.Services.Social;
+using Microsoft.Practices.Unity;
 
 namespace AllShare.Controllers
 {
     public class SocialController : Controller
     {
+        [Dependency]
+        public ISocialService SocialService { get; set; }
+
         private static readonly string ConsumerKey = WebConfigurationManager.AppSettings["TwitterConsumerKey"];
         private static readonly string ConsumerSecret = WebConfigurationManager.AppSettings["TwitterConsumerSecret"];
 
         [HttpPost]
         public async Task FacebookPost(string text, string username, string imagePath)
         {
-            var description = String.Format("{0} - {1}", text, username);
-            var facebookClient = new Facebook.FacebookClient(Session["FacebookAccessToken"].ToString());
-
-            object postParams;
-
-            if (!String.IsNullOrEmpty(imagePath))
-            {
-                var split = imagePath.Split('/');
-
-                string localFilename = System.IO.Path.Combine(
-                    Server.MapPath("~/uploadImages"), split.Last());
-
-                if (!System.IO.File.Exists(localFilename))
-                {
-                    using (WebClient client = new WebClient())
-                    {
-                        client.DownloadFile(new Uri(imagePath), localFilename);
-                    }
-                }
-
-                var sourceFile = new Facebook.FacebookMediaObject
-                {
-                    ContentType = "image/jpeg",
-                    FileName = Path.GetFileName(localFilename)
-                }.SetValue(System.IO.File.ReadAllBytes(localFilename));
-
-                postParams = new { message = description, source = sourceFile };
-            }
-            else
-                postParams = new {message = description};
-
-            try
-            {
-                dynamic fbPostTaskResult = await facebookClient.PostTaskAsync("/me/photos", postParams);
-
-                var result = (IDictionary<string, object>)fbPostTaskResult;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await
+                SocialService.FacebookPost(text, username, imagePath, Server.MapPath("~/uploadImages"),
+                    (string) Session["FacebookAccessToken"]);
         }
 
         [HttpPost]
         public async Task SendTweet(string text, string username, string imagePath)
         {
-            var description = String.Format("{0} - {1}", text, username);
-            TwitterService service = new TwitterService(ConsumerKey, ConsumerSecret);
+            var viewModel = (AccountViewModel)Session["User"];
+            await
+                SocialService.SendTweet(text, username, imagePath, Server.MapPath("~/uploadImages"), ConsumerKey,
+                    ConsumerSecret, viewModel.TwitterToken, viewModel.TwitterTokenSecret);
+        }
 
-            var viewModel = (AccountViewModel) Session["User"];
-
-            service.AuthenticateWith(viewModel.TwitterToken, viewModel.TwitterTokenSecret);
-
-            if (!String.IsNullOrEmpty(imagePath))
-            {
-                var split = imagePath.Split('/');
-
-                string localFilename = System.IO.Path.Combine(
-                    Server.MapPath("~/uploadImages"), split.Last());
-                if (!System.IO.File.Exists(localFilename))
-                {
-                    using (WebClient client = new WebClient())
-                    {
-                        client.DownloadFile(new Uri(imagePath), localFilename);
-                    }
-                }
-
-                var stream = new FileStream(localFilename, FileMode.Open);
-                try
-                {
-                    var mediaResult = service.SendTweetWithMedia(new SendTweetWithMediaOptions
-                    {
-                        Status = description,
-                        Images = new Dictionary<string, Stream>
-                        {
-                            {Guid.NewGuid().ToString(), stream}
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-            else
-            {
-                TwitterStatus result = service.SendTweet(new SendTweetOptions
-                {
-                    Status = description
-                });
-            }
+        [HttpPost]
+        public async Task ScheduleJob(string text, string username, string imagePath, string toRun)
+        {
+            var viewModel = (AccountViewModel)Session["User"];
+            SocialService.AddJob(text, viewModel.UserId, username, imagePath, DateTime.Parse(toRun), false);
         }
     }
 }

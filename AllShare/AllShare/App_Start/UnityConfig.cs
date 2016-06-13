@@ -4,7 +4,9 @@ using AllShare.Core.Repositories;
 using AllShare.Infrastructure.DatabaseEngine;
 using AllShare.Infrastructure.Repositories;
 using AllShare.Services.Account;
+using AllShare.Services.Social;
 using AllShare.Services.NewsFeed;
+using AllShare.Services.Social;
 using AllShare.Services.User;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
@@ -48,10 +50,12 @@ namespace AllShare.App_Start
             container.RegisterType<IAccountService, AccountService>();
             container.RegisterType<INewsFeedService, NewsFeedService>();
             container.RegisterType<IUserService, UserService>();
+            container.RegisterType<ISocialService, SocialService>();
             container.RegisterType<IOnlineUserRepository, OnlineUserRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
             container.RegisterType<IPostRepository, PostRepository>();
             container.RegisterType<IOnlineUserRepository, OnlineUserRepository>();
+            container.RegisterType<IJobRepository, JobRepository>();
         }
     }
 }

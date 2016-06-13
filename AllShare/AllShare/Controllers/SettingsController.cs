@@ -4,6 +4,7 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using AllShare.Models;
 using AllShare.Services.Account;
+using AllShare.Services.Social;
 using AllShare.Services.Utils;
 using Facebook;
 using Microsoft.Practices.Unity;
@@ -16,6 +17,8 @@ namespace AllShare.Controllers
     {
         [Dependency]
         public IAccountService AccountService { get; set; }
+        [Dependency]
+        public ISocialService SocialService { get; set; }
 
         private static readonly string ConsumerKey = WebConfigurationManager.AppSettings["TwitterConsumerKey"];
         private static readonly string ConsumerSecret = WebConfigurationManager.AppSettings["TwitterConsumerSecret"];
@@ -46,7 +49,10 @@ namespace AllShare.Controllers
             if (Session["User"] == null)
                 return Redirect(Url.Action("Index", "Account"));
 
-            return View();
+            var user = (AccountViewModel) Session["User"];
+            var viewModel = new SettingsViewModel {Jobs = SocialService.GetNotRunJobs(user.UserId)};
+
+            return View(viewModel);
         }
 
         public ActionResult Facebook()

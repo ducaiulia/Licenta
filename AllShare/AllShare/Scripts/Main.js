@@ -25,5 +25,22 @@
             $('#myModal').foundation('reveal', 'open');
             setTimeout(SocialSpace.HideModal, 1500);
         });
+    },
+
+    Scheduled: function () {
+        console.log("success");
+        $('#myModal').foundation('reveal', 'open');
+        setTimeout(SocialSpace.HideModal, 1500);
     }
+    //ScheduleJob: function(text, username, imagePath, datetime) {
+    //    $.ajax({
+    //        url: "/Social/ScheduleJob",
+    //        method: "POST",
+    //        data: { text: text, username: username, imagePath: imagePath, toRun: datetime}
+    //    }).success(function () {
+    //        console.log("success");
+    //        $('#myModal').foundation('reveal', 'open');
+    //        setTimeout(SocialSpace.HideModal, 1500);
+    //    });
+    //}
 };

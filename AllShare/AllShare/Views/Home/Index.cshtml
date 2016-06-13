@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Home Page";
 }
+<script src="../../Scripts/jquery.unobtrusive-ajax.js"></script>
 
 <div class="row">
     <div class="icon-bar three-up">
@@ -19,18 +20,20 @@
         </a>
     </div>
 </div>
+
 <div class="row">
     <div class="small-10 columns">
         <h2>Welcome, @Model.Account.Username !</h2>
-        @using (Ajax.BeginForm("Post", "Home", new AjaxOptions { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
-        {
+
+        <form action="/Home/Post" method="post" enctype="multipart/form-data">
             <textarea placeholder="Your text..." name="Text"></textarea>
-            
+
             <a href="#" onclick="performClick('imagePath');">Choose photo</a>
-            <input type="file" name="file" id="imagePath"/>
+            @Html.AntiForgeryToken()
+            <input type="file" name="File" id="imagePath"/>
 
             <button type="submit">Add Post</button>
-        }
+        </form>
 
         @if (@Model.NewsFeed.Posts == null || @Model.NewsFeed.Posts.Count == 0)
         {
@@ -40,26 +43,49 @@
         {
             foreach (var post in Model.NewsFeed.Posts)
             {
-                <h5>@post.Text</h5>
-                if (post.IsFile)
-                {
-                    <img src="@post.ImagePath"/>
-                }
-                <p>@post.User.Username</p>
-                <small>@post.DateTime</small>
-                if (Model.Account.IsFbAuthenticated)
-                {
-                    <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
-                        <i class="step fi-social-facebook size-24"></i>
-                    </a>
-                }
+                <div class="row">
+                    <h5>@post.Text</h5>
+                    @if (post.IsFile)
+                    {
+                        <img src="@post.ImagePath"/>
+                    }
+                    <p>@post.User.Username</p>
+                    <small>@post.DateTime</small>
+                            @if (Model.Account.IsFbAuthenticated || Model.Account.IsTwitterAuthenticated)
+                            {
+                                <p>Share now on:</p>
+                            }
+                            @if (Model.Account.IsFbAuthenticated)
+                            {
+                                <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
+                                    <i class="step fi-social-facebook size-24"></i>
+                                </a>
+                            }
 
-                if (Model.Account.IsTwitterAuthenticated)
-                {
-                    <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
-                        <i class="step fi-social-twitter size-24"></i>
-                    </a>
-                }
+                            @if (Model.Account.IsTwitterAuthenticated)
+                            {
+                                <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
+                                    <i class="step fi-social-twitter size-24"></i>
+                                </a>
+                            }
+                    <div class="myDatepicker small-5 columns">
+                        @if (Model.Account.IsFbAuthenticated || Model.Account.IsTwitterAuthenticated)
+                        {
+                            using (Ajax.BeginForm("ScheduleJob", "Social", new AjaxOptions {HttpMethod = "POST", OnSuccess = "SocialSpace.Scheduled()"}))
+                            {
+                                <p>Choose when the post will be shared: </p>
+                                @Html.HiddenFor(m => post.Text, new {@Name = "text"})
+                                @Html.HiddenFor(m => post.User.Username, new {@Name = "username"})
+                                @Html.HiddenFor(m => post.ImagePath, new {@Name = "imagePath"})
+                                <input type="text" class="span2" value="@Model.Today" name="toRun">
+                                <select data-prompt="Choose the social network">
+                                    <option value="husker">Facebok</option>
+                                </select>
+                                <button type="submit">Schedule</button>
+                            }
+                        }
+                    </div>
+                </div>
             }
         }
     </div>
@@ -67,7 +93,6 @@
         @Html.Partial("_OnlineUsers", Model.OnlineUsers)
     </div>
 </div>
-
 <div id="myModal" class="tiny reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
     <small>Published to Facebook feed successfully!</small>
 </div>
@@ -123,6 +148,14 @@
                 elem.dispatchEvent(evt);
             }
         }
+
+        $(function () {
+            $('.myDatepicker input[type=text]').fdatepicker({
+                format: 'mm-dd-yyyy hh:ii',
+                disableDblClickSelection: true,
+                pickTime: true
+            });
+        });
     </script>
 }
 
