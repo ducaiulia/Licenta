@@ -49,6 +49,15 @@ namespace AllShare.App_Start
 
             TinyMapper.Bind<AccountInput, UserDTO>(config =>
             {
+                config.Bind(source => source.Username, target => target.Username);   
+                config.Bind(source => source.Email, target => target.Email);
+                config.Bind(source => source.Password, target => target.Password);
+                config.Bind(source => source.FirstName, target => target.FirstName);
+                config.Bind(source => source.LastName, target => target.LastName);
+            });
+
+            TinyMapper.Bind<AccountInput, UserDTO>(config =>
+            {
                 config.Bind(source => source.Username, target => target.Username);
                 config.Bind(source => source.Password, target => target.Password);
             });

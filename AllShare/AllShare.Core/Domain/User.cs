@@ -16,5 +16,6 @@ namespace AllShare.Core.Domain
         public string FacebookToken { get; set; }
         public string TwitterToken { get; set; }
         public string TwitterTokenSecret { get; set; }
+        public string Email { get; set; }
     }
 }

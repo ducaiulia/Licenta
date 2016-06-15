@@ -44,30 +44,34 @@
             foreach (var post in Model.NewsFeed.Posts)
             {
                 <div class="row">
-                    <h5>@post.Text</h5>
-                    @if (post.IsFile)
+                    <div>
+                        <h5>@post.Text</h5>
+                        @if (post.IsFile)
                     {
-                        <img src="@post.ImagePath"/>
-                    }
-                    <p>@post.User.Username</p>
-                    <small>@post.DateTime</small>
-                            @if (Model.Account.IsFbAuthenticated || Model.Account.IsTwitterAuthenticated)
-                            {
-                                <p>Share now on:</p>
-                            }
-                            @if (Model.Account.IsFbAuthenticated)
-                            {
-                                <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
-                                    <i class="step fi-social-facebook size-24"></i>
-                                </a>
-                            }
+                            <img src="@post.ImagePath" />
+                        }
+                        <p style="margin-bottom: 0px">@post.User.Username</p>
+                        <small>@post.DateTime</small>
+                        <br/>
+                        @if ((Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null) || (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null))
+                        {
+                            <span class="success round label">Share now on:</span>
+                        }
 
-                            @if (Model.Account.IsTwitterAuthenticated)
-                            {
-                                <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
-                                    <i class="step fi-social-twitter size-24"></i>
-                                </a>
-                            }
+                        @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
+                        {
+                            <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
+                                <i class="step fi-social-facebook size-24"></i>
+                            </a>
+                        }
+
+                        @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
+                        {
+                            <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
+                                <i class="step fi-social-twitter size-24"></i>
+                            </a>
+                        }
+                    </div>
                     <div class="myDatepicker small-5 columns">
                         @if (Model.Account.IsFbAuthenticated || Model.Account.IsTwitterAuthenticated)
                         {
@@ -78,8 +82,15 @@
                                 @Html.HiddenFor(m => post.User.Username, new {@Name = "username"})
                                 @Html.HiddenFor(m => post.ImagePath, new {@Name = "imagePath"})
                                 <input type="text" class="span2" value="@Model.Today" name="toRun">
-                                <select data-prompt="Choose the social network">
-                                    <option value="husker">Facebok</option>
+                                <select name="options" data-prompt="Choose the social network">
+                                    @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
+                                    {
+                                        <option value="Facebook">Facebook</option>
+                                    }
+                                    @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
+                                    {
+                                        <option value="Twitter">Twitter</option>
+                                    }
                                 </select>
                                 <button type="submit">Schedule</button>
                             }
@@ -94,7 +105,7 @@
     </div>
 </div>
 <div id="myModal" class="tiny reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-    <small>Published to Facebook feed successfully!</small>
+    <p id="genericText"></p>
 </div>
 <div class="reveal-modal-bg" style="position: fixed"></div>
 

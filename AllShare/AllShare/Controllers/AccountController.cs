@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using AllShare.Models;
 using AllShare.Models.Builders;
 using AllShare.Services.Account;
 using Facebook;
 using Microsoft.Practices.Unity;
+using Newtonsoft.Json;
 using Action = AllShare.Services.Utils.Action;
 
 namespace AllShare.Controllers
@@ -43,9 +47,14 @@ namespace AllShare.Controllers
             {
                 Session["User"] = viewModel;
                 Session["FacebookAccessToken"] = viewModel.FacebookToken;
-                return Redirect(Url.Action("Index", "Home"));
+                Session["TwitterAccessToken"] = viewModel.TwitterToken;
+                Session["TwitterAccessTokenSecret"] = viewModel.TwitterTokenSecret;
+                return Json(new {url = Url.Action("Index", "Home"), status = 1});
             }
-            return null;
+            else
+            {
+                return Json(new {message = "Your login attempt was not succesful.", status = 0});
+            }
         }
 
         [HttpPost]
@@ -54,8 +63,14 @@ namespace AllShare.Controllers
             account.Action = Action.Register;
             var viewModel = await new AccountViewModelBuilder(AccountService, account).Build();
             if (viewModel != null)
+            {
                 Session["User"] = viewModel;
-                return Redirect(Url.Action("Index", "Home"));
+                return Json(new { url = Url.Action("Index", "Home"), status = 1 });
+            }
+            else
+            {
+                return Json(new { message = "Your register attempt was not succesful.", status = 0 });
+            }
         }
 
         public async Task<ActionResult> Logout()

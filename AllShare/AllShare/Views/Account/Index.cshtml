@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AllShare.Models.AccountInput
+@{
     ViewBag.Title = "Welcome to AllShare";
 }
 
@@ -10,7 +11,8 @@
         </ul>
         <div class="tabs-content">
             <div class="content active" id="login" style="background-color: white">
-                @using (Ajax.BeginForm("Login", new AjaxOptions {HttpMethod = "POST", OnFailure = "SocialSpace.OnSuccess"}))
+                <br/>
+                @using (Ajax.BeginForm("Login", new AjaxOptions {HttpMethod = "POST", OnSuccess = "SocialSpace.OnSuccess"}))
                 {
                     <div class="row">
                         <div class="small-8 small-centered columns">
@@ -28,31 +30,37 @@
                 }
             </div>
             <div class="content" id="register" style="background-color: white">
-                @using (Ajax.BeginForm("Register", new AjaxOptions {HttpMethod = "POST", OnFailure = "SocialSpace.OnSuccess"}))
+                <br/>
+                @using (Ajax.BeginForm("Register", new AjaxOptions {HttpMethod = "POST", OnSuccess = "SocialSpace.OnSuccess" }))
                 {
                     <div class="row">
                         <div class="small-8 small-centered columns">
-                            <input type="text" placeholder="Username" name="Username" style="border-radius: 10px"/>
+                            @Html.ValidationMessageFor(model => model.Username)
+                            @Html.TextBoxFor(model => model.Username, new {@type = "text", @placeholder = "Username", @style = "border-radius: 10px"})
                         </div>
                     </div>
                     <div class="row">
                         <div class="small-8 small-centered columns">
-                            <input type="password" placeholder="Password" name="Password" style="border-radius: 10px"/>
+                            @Html.ValidationMessageFor(model => model.Password)
+                            @Html.TextBoxFor(model => model.Password, new {@type = "password", @placeholder = "Password", @style = "border-radius: 10px"})
                         </div>
                     </div>
                     <div class="row">
                         <div class="small-8 small-centered columns">
-                            <input type="text" placeholder="First Name" name="FirstName" style="border-radius: 10px"/>
+                            @Html.ValidationMessageFor(model => model.FirstName)
+                            @Html.TextBoxFor(model => model.FirstName, new {@type = "text", @placeholder = "First Name", @style = "border-radius: 10px"})
                         </div>
                     </div>
                     <div class="row">
                         <div class="small-8 small-centered columns">
-                            <input type="text" placeholder="Last Name" name="LastName" style="border-radius: 10px"/>
+                            @Html.ValidationMessageFor(model => model.LastName)
+                            @Html.TextBoxFor(model => model.LastName, new {@type = "text", @placeholder = "Last Name", @style = "border-radius: 10px"})
                         </div>
                     </div>
                     <div class="row">
                         <div class="small-8 small-centered columns">
-                            <input type="text" placeholder="Email" name="Email" style="border-radius: 10px"/>
+                            @Html.ValidationMessageFor(model => model.Email)
+                            @Html.TextBoxFor(model => model.Email, new {@type = "email", @placeholder = "Email", @style = "border-radius: 10px"})
                         </div>
                     </div>
                     <div class="row">
@@ -64,7 +72,15 @@
     </div>
 </div>
 
+<div id="myModal" class="tiny reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h4 id="modalTitle"></h4>
+    <p id="genericText"></p>
+</div>
+<div class="reveal-modal-bg" style="position: fixed"></div>
+
 @section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="../../Scripts/jquery.unobtrusive-ajax.js"></script>
     @Scripts.Render("~/bundles/signalrHubs")
     <script src="~/signalr/hubs"></script>
     @Scripts.Render("~/bundles/allshare")
