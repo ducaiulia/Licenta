@@ -134,5 +134,10 @@ namespace AllShare.Services.Social
             var jobsModel = JobRepository.GetAllNotRunJobsForUser(userId);
             return TinyMapper.Map<List<JobDTO>>(jobsModel);
         }
+
+        public void DeleteJob(int jobId)
+        {
+            JobRepository.Delete(jobId);
+        }
     }
 }

@@ -5,7 +5,7 @@
 }
 
 
-<div class="row">
+    <div class="row">
     <div class="icon-bar three-up">
         <a class="item" href="@Url.Action("Index","Home")">
             <i class="step fi-home size-12"></i>
@@ -41,16 +41,16 @@
     <h3>Scheduled post</h3>
     @if (Model.Jobs != null && Model.Jobs.Count > 0)
     {
-        <table>
+        <table role="grid">
             <thead>
             <tr>
-                <td>#</td>
-                <td>Description</td>
-                <td>Image Source</td>
-                <td>Author</td>
-                <td>Share to</td>
-                <td>Scheduled date</td>
-                <td>Action</td>
+                <th>#</th>
+                <th>Description</th>
+                <th>Image Source</th>
+                <th>Author</th>
+                <th>Share to</th>
+                <th>Scheduled date</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -59,12 +59,11 @@
                 <tr>
                     <td>@job.Id</td>
                     <td>@job.Text</td>
-                    <td width="250">@job.ImagePath</td>
+                    <td style="display: block; width: 455px; overflow: hidden; text-overflow: ellipsis; padding-top: 33px;">@job.ImagePath</td>
                     <td>@job.AuthorUsername</td>
-                    <td>Facebook</td>
-                    @*<td>@(job.IsFacebook ? "Facebook" : "Twitter")</td>*@
+                    <td>@(job.IsFacebook ? "Facebook" : "Twitter")</td>
                     <td>@job.ToBeRunAt.ToString("g", DateTimeFormatInfo.InvariantInfo)</td>
-                    <td><button class="button alert">Delete</button></td>
+                    <td><button class="button alert" onclick="SocialSpace.DeleteJob(@job.Id)">Delete</button></td>
                 </tr>
             }
             </tbody>
@@ -75,6 +74,10 @@
         <h5>You currently don't have any scheduled jobs.</h5>
     }
 </div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/allshare")
+}
 @*<script>
     var doAjaxBeforeUnloadEnabled = true;
     var doAjaxBeforeUnload = function (evt) {

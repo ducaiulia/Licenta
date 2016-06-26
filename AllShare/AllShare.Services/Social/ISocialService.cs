@@ -14,5 +14,6 @@ namespace AllShare.Services.Social
 
         void AddJob(string text, int userId, string authorUsername, string imagePath, DateTime toBeRunAt, bool isFacebook);
         IList<JobDTO> GetNotRunJobs(int userId);
+        void DeleteJob(int jobId);
     }
 }

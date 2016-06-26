@@ -45,17 +45,17 @@
             {
                 <div class="row">
                     <div>
-                        <h5>@post.Text</h5>
+                        <h5>" @post.Text "</h5>
                         @if (post.IsFile)
                     {
                             <img src="@post.ImagePath" />
                         }
-                        <p style="margin-bottom: 0px">@post.User.Username</p>
-                        <small>@post.DateTime</small>
+                        <h4 style="margin-bottom: 0px; font-weight: bolder;">by @post.User.Username</h4>
+                        <p style="margin-bottom: 0px">@post.DateTime</p>
                         <br/>
                         @if ((Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null) || (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null))
                         {
-                            <span class="success round label">Share now on:</span>
+                            <span class="success round label" style="font-size: 1.000rem">Share now on:</span>
                         }
 
                         @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)

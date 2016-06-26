@@ -39,5 +39,11 @@ namespace AllShare.Controllers
             var viewModel = (AccountViewModel)Session["User"];
             SocialService.AddJob(text, viewModel.UserId, username, imagePath, DateTime.Parse(toRun), false);
         }
+
+        [HttpPost]
+        public void DeleteJob(int jobId)
+        {
+            SocialService.DeleteJob(jobId);
+        }
     }
 }

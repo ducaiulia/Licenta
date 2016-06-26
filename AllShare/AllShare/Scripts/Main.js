@@ -48,6 +48,16 @@
         if (data["status"] === 1) {
             window.location.href = data["url"];
         }
+    },
+
+    DeleteJob: function(id) {
+        $.ajax({
+            url: "/Social/DeleteJob",
+            method: "POST",
+            data: { jobId: id }
+        }).success(function (data) {
+            location.reload();
+        });
     }
     //ScheduleJob: function(text, username, imagePath, datetime) {
     //    $.ajax({

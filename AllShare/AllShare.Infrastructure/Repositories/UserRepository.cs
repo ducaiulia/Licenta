@@ -44,9 +44,15 @@ namespace AllShare.Infrastructure.Repositories
 
         public User GetUser(string username)
         {
-            var user = dbContext.Users.Include(u => u.Posts).FirstOrDefault(u => u.Username.Equals(username));
-
-            return user;
+            try
+            {
+                var user = dbContext.Users.Include(u => u.Posts).FirstOrDefault(u => u.Username.Equals(username));
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public User GetUser(int id)

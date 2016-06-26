@@ -29,5 +29,22 @@ namespace AllShare.Infrastructure.Repositories
         {
             return dbContext.Jobs.Where(x => x.CurrentUserId.Equals(userId) && x.Finished.Equals(false)).OrderBy(y => y.ToBeRunAt).ToList();
         }
+
+        public void Delete(int jobId)
+        {
+            var job = dbContext.Jobs.First(p => p.Id.Equals(jobId));
+            if (job != null)
+            {
+                try
+                {
+                    dbContext.Jobs.Remove(job);
+                    dbContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+            }
+        }
     }
 }

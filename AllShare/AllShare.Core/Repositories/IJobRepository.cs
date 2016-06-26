@@ -12,5 +12,6 @@ namespace AllShare.Core.Repositories
         void Add(SharePostJobModel jobModel);
         IList<SharePostJobModel> GetAllJobs();
         IList<SharePostJobModel> GetAllNotRunJobsForUser(int userId);
+        void Delete(int jobId);
     }
 }
