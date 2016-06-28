@@ -28,14 +28,23 @@ namespace AllShare
             bundles.Add(new ScriptBundle("~/bundles/signalrHubs").Include(
                         "~/Scripts/jquery.signalR-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/respond.js",
+                      "~/Scripts/scripts.js"));
 
-            #region Foundation Bundles
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/site.css",
+                      "~/Content/styles.css"));
 
-            bundles.Add(Foundation.Styles());
+            //#region Foundation Bundles
 
-            bundles.Add(Foundation.Scripts());
+            //bundles.Add(Foundation.Styles());
 
-            #endregion
+            //bundles.Add(Foundation.Scripts());
+
+            //#endregion
         }
     }
 }
