@@ -58,7 +58,8 @@ namespace AllShare.Controllers
         [HttpPost]
         public async Task<string> GetOnlineUsers()
         {
-            string source = "{{#if Users}}{{#each Users}}<small>{{this}}</small><br/>{{/each}}{{else}}<small>No online users.</small>{{/if}}";
+            string source = "<div class='panel panel-default'><div class='panel-heading'><a href ='#' class='pull-right'></a><h4>Online Users</h4></div><div class='panel-body'>"+
+        "<div class='list-group'>" + "{{#if Users}}{{#each Users}}<a href='#' class='list-group-item'>{{this}}</a>{{/each}}{{else}}<a href='#' class='list-group-item'>No online users.</a>{{/if}}</div></div></div>";
 
             var template = Handlebars.Compile(source);
             

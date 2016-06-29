@@ -3,117 +3,212 @@
     ViewBag.Title = "Home Page";
 }
 <script src="../../Scripts/jquery.unobtrusive-ajax.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 
-<div class="row">
-    <div class="icon-bar three-up">
-        <a class="item" href="@Url.Action("Index","Home")">
-            <i class="step fi-home size-12"></i>
-            <label>Home</label>
-        </a>
-        <a class="item" href="@Url.Action("Index", "Settings")">
-            <i class="step fi-widget size-12"></i>
-            <label>Settings</label>
-        </a>
-        <a class="item" href="@Url.Action("Logout", "Account")">
-            <i class="step fi-target size-12"></i>
-            <label>Logout</label>
-        </a>
+<div class="wrapper">
+    <div class="box">
+        <div class="row row-offcanvas">
+
+            <!-- main right col -->
+            <div class="column col-sm-12 col-xs-11" id="main">
+
+                <!-- top nav -->
+                <div class="navbar navbar-blue navbar-static-top">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a href="/" class="navbar-brand logo">all</a>
+                    </div>
+                    <nav class="collapse navbar-collapse" role="navigation">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="@Url.Action("Index", "Home")"><i class="glyphicon glyphicon-home"></i> Home</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Settings")"><i class="glyphicon glyphicon-flash"></i> Settings</a>
+                            </li>
+                            <li>
+                                <a href="#postModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Post</a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="#">Hello, @Model.Account.Username!</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("Logout", "Account")">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- /top nav -->
+
+                <div class="padding">
+                    <div class="full col-sm-9">
+                        <div class="row">
+                            <div>
+                                <div class="col-sm-8 col-sm-offset-1">
+                                    @if (@Model.NewsFeed.Posts == null || @Model.NewsFeed.Posts.Count == 0)
+                                    {
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <a href="#" class="pull-right"></a> <h4></h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                No posts yet.
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        foreach (var post in Model.NewsFeed.Posts)
+                                        {
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <a href="#" class="pull-right"></a> <h4>@post.Text</h4>
+                                                </div>
+                                                <div class="panel-thumbnail">
+                                                @if (post.IsFile)
+                                                {
+                                                    <img width="400" src="@post.ImagePath" class="img-responsive" style="float: none; margin: 0 auto">
+                                                }
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="clearfix"></div>
+                                                    <hr>
+                                                    <p>
+                                                        <img src="//placehold.it/150x150" class="img-circle pull-right">
+                                                    </p>
+                                                    @post.DateTime
+                                                    <hr/>
+                                                    <ul>
+                                                        
+
+                                                        @if ((Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null) || (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null))
+                                                        {
+                                                            <li style="display: inline-block">
+                                                                <a href="#"><span class="badge">Share now on:</span></a>
+                                                            </li>
+                                                        }
+
+                                                        @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
+                                                        {
+                                                            <li style="display: inline-block">
+                                                                <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
+                                                                    <span class="badge">Facebook</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+
+                                                        @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
+                                                        {
+                                                            <li style="display: inline-block">
+                                                                <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
+                                                                    <span class="badge">Twitter</span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                    @if ((Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null) || (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null))
+                                                    {
+                                                        using (Ajax.BeginForm("ScheduleJob", "Social", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "SocialSpace.Scheduled()" }, new { @class="col-md-4" }))
+                                                        {
+                                                            <label>Choose when the post will be shared: </label>
+                                                            @Html.HiddenFor(m => post.Text, new { @Name = "text" })
+                                                            @Html.HiddenFor(m => post.User.Username, new { @Name = "username" })
+                                                            @Html.HiddenFor(m => post.ImagePath, new { @Name = "imagePath" })
+                                                            <div class="form-group">
+                                                                <div class="input-group date form_datetime col-md-11" data-date="@Model.Today" data-date-format="MM dd yyyy - HH:ii p" data-link-field="dtp_input1" style="padding-left: 0px">
+                                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                                                </div>
+                                                                <input type="hidden" id="dtp_input1" value="" name="toRun"/><br/>
+                                                            </div>
+                                                            <br />
+                                                            <div class="form-group" style="display: inline-block">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" name="options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                        Choose social network:
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                                        @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
+                                                                        {
+                                                                            <li value="Facebook"><a href="#">Facebook</a></li>
+                                                                        }
+                                                                        @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
+                                                                        {
+                                                                            <li value="Twitter"><a href="#">Twitter</a></li>
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-info">Schedule</button>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="col-sm-2" id="onlineUsers">
+                                    @Html.Partial("_OnlineUsers", Model.OnlineUsers)
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div><!-- /col-9 -->
+                </div><!-- /padding -->
+            </div>
+            <!-- /main -->
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="small-10 columns">
-        <h2>Welcome, @Model.Account.Username !</h2>
+<!--post modal-->
+<div id="postModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                Update Status
+            </div>
+            <form class="form center-block" action="/Home/Post" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
 
-        <form action="/Home/Post" method="post" enctype="multipart/form-data">
-            <textarea placeholder="Your text..." name="Text"></textarea>
-
-            <a href="#" onclick="performClick('imagePath');">Choose photo</a>
-            @Html.AntiForgeryToken()
-            <input type="file" name="File" id="imagePath"/>
-
-            <button type="submit">Add Post</button>
-        </form>
-
-        @if (@Model.NewsFeed.Posts == null || @Model.NewsFeed.Posts.Count == 0)
-        {
-            <h4>No Posts yet.</h4>
-        }
-        else
-        {
-            foreach (var post in Model.NewsFeed.Posts)
-            {
-                <div class="row">
-                    <div>
-                        <h5>" @post.Text "</h5>
-                        @if (post.IsFile)
-                    {
-                            <img src="@post.ImagePath" />
-                        }
-                        <h4 style="margin-bottom: 0px; font-weight: bolder;">by @post.User.Username</h4>
-                        <p style="margin-bottom: 0px">@post.DateTime</p>
-                        <br/>
-                        @if ((Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null) || (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null))
-                        {
-                            <span class="success round label" style="font-size: 1.000rem">Share now on:</span>
-                        }
-
-                        @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
-                        {
-                            <a class="item" onclick="SocialSpace.PostOnFacebook('@post.Text', '@post.User.Username', '@post.ImagePath')">
-                                <i class="step fi-social-facebook size-24"></i>
-                            </a>
-                        }
-
-                        @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
-                        {
-                            <a class="item" onclick="SocialSpace.SendTweet('@post.Text', '@post.User.Username', '@post.ImagePath')">
-                                <i class="step fi-social-twitter size-24"></i>
-                            </a>
-                        }
-                    </div>
-                    <div class="myDatepicker small-5 columns">
-                        @if (Model.Account.IsFbAuthenticated || Model.Account.IsTwitterAuthenticated)
-                        {
-                            using (Ajax.BeginForm("ScheduleJob", "Social", new AjaxOptions {HttpMethod = "POST", OnSuccess = "SocialSpace.Scheduled()"}))
-                            {
-                                <p>Choose when the post will be shared: </p>
-                                @Html.HiddenFor(m => post.Text, new {@Name = "text"})
-                                @Html.HiddenFor(m => post.User.Username, new {@Name = "username"})
-                                @Html.HiddenFor(m => post.ImagePath, new {@Name = "imagePath"})
-                                <input type="text" class="span2" value="@Model.Today" name="toRun">
-                                <select name="options" data-prompt="Choose the social network">
-                                    @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
-                                    {
-                                        <option value="Facebook">Facebook</option>
-                                    }
-                                    @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
-                                    {
-                                        <option value="Twitter">Twitter</option>
-                                    }
-                                </select>
-                                <button type="submit">Schedule</button>
-                            }
-                        }
+                    <div class="form-group">
+                        <textarea class="form-control input-lg" autofocus="" placeholder="What do you want to share?" name="Text"></textarea>
                     </div>
                 </div>
-            }
-        }
-    </div>
-    <div class="small-2 columns" id="onlineUsers">
-        @Html.Partial("_OnlineUsers", Model.OnlineUsers)
+                <div class="modal-footer">
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-sm" aria-hidden="true">Post</button>
+                        <ul class="pull-left list-inline"><li>
+                            <a href="#" onclick="performClick('imagePath');"></a>
+                            @Html.AntiForgeryToken()
+                            <input type="file" name="File" id="imagePath"/>
+                        </li></ul>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-<div id="myModal" class="tiny reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-    <p id="genericText"></p>
-</div>
-<div class="reveal-modal-bg" style="position: fixed"></div>
 
 @section scripts{
     @Scripts.Render("~/bundles/signalrHubs")
     <script src="~/signalr/hubs"></script>
     @Scripts.Render("~/bundles/allshare")
-
+<script type="text/javascript" src="~/Scripts/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="~/Scripts/bootstrap-datetimepicker.uk.js" charset="UTF-8"></script>
     <script>
         $(function() {
             var userHub = $.connection.userHub;
@@ -161,10 +256,15 @@
         }
 
         $(function () {
-            $('.myDatepicker input[type=text]').fdatepicker({
-                format: 'mm-dd-yyyy hh:ii',
-                disableDblClickSelection: true,
-                pickTime: true
+            $('.form_datetime').datetimepicker({
+                //language:  'fr',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                forceParse: 0,
+                showMeridian: 1
             });
         });
     </script>

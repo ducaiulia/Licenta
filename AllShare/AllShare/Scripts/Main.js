@@ -36,18 +36,21 @@
         //setTimeout(SocialSpace.HideModal, 1500);
     },
 
+    OnBegin: function (button) {
+        $(button).prop('disabled', true);
+    },
+
     OnSuccess: function (data) {
         console.log(data);
-        //if (data["status"] === 0) {
-        //    $('#myModal #modalTitle').html("Error");
-        //    $('#myModal #modalTitle').css("color", "red");
-        //    $('#myModal #genericText').html(data["message"]);
-        //    $('#myModal').foundation('reveal', 'open');
-        //    setTimeout(SocialSpace.HideModal, 2000);
-        //}
-        //if (data["status"] === 1) {
-        //    window.location.href = data["url"];
-        //}
+        if (data["status"] === 0) {
+            $('#genericModal #title').html("Error");
+            $('#genericModal #title').css("color", "red");
+            $('#genericModal #modalBody').html(data["message"]);
+            $('#genericModal').modal('show')
+        }
+        if (data["status"] === 1) {
+            window.location.href = data["url"];
+        }
     },
 
     DeleteJob: function(id) {

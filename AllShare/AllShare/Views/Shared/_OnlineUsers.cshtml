@@ -1,14 +1,19 @@
 ﻿@model AllShare.Models.OnlineUsersViewModel
-
-@if (Model == null || Model.Users == null || Model.Users.Count == 0)
-{
-    <small>No online users.</small>
-}
-else
-{
-    foreach (var user in Model.Users)
-    {
-        <small>@user</small>
-        <br/>
-    }
-}
+<div class="panel panel-default">
+    <div class="panel-heading"><a href="#" class="pull-right"></a> <h4>Online Users</h4></div>
+    <div class="panel-body">
+        <div class="list-group">
+            @if (Model == null || Model.Users == null || Model.Users.Count == 0)
+            {
+                <a href="#" class="list-group-item">No online users.</a>
+            }
+            else
+            {
+                foreach (var user in Model.Users)
+                {
+                    <a href="#" class="list-group-item">@user</a>
+                }
+            }
+        </div>
+    </div>
+</div>
