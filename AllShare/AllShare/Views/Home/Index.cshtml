@@ -83,10 +83,10 @@
                                                 <div class="panel-body">
                                                     <div class="clearfix"></div>
                                                     <hr>
-                                                    <p>
+                                                    @*<p>
                                                         <img src="//placehold.it/150x150" class="img-circle pull-right">
-                                                    </p>
-                                                    @post.DateTime
+                                                    </p>*@
+                                                    @post.DateTime by @post.User.Username
                                                     <hr/>
                                                     <ul>
                                                         
@@ -118,39 +118,33 @@
                                                     </ul>
                                                     @if ((Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null) || (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null))
                                                     {
-                                                        using (Ajax.BeginForm("ScheduleJob", "Social", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "SocialSpace.Scheduled()" }, new { @class="col-md-4" }))
+                                                        using (Ajax.BeginForm("ScheduleJob", "Social", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "SocialSpace.Scheduled()" }, new { @class="col-md-6" }))
                                                         {
-                                                            <label>Choose when the post will be shared: </label>
+                                                            <label>Set a date and a time when the post will be shared: </label>
                                                             @Html.HiddenFor(m => post.Text, new { @Name = "text" })
                                                             @Html.HiddenFor(m => post.User.Username, new { @Name = "username" })
                                                             @Html.HiddenFor(m => post.ImagePath, new { @Name = "imagePath" })
-                                                            <div class="form-group">
-                                                                <div class="input-group date form_datetime col-md-11" data-date="@Model.Today" data-date-format="MM dd yyyy - HH:ii p" data-link-field="dtp_input1" style="padding-left: 0px">
+                                                            <input class="form-control" type="text" id="toRun" value="@Model.Today" name="toRun" placeholder="@Model.Today" />
+                                                            @*<div class="form-group">
+                                                                <div class="input-group date form_datetime col-md-11" data-date="@Model.Today" data-date-format="MM dd yyyy HH:ii" style="padding-left: 0px">
                                                                     <input class="form-control" size="16" type="text" value="" readonly>
                                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                                                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                                                                 </div>
-                                                                <input type="hidden" id="dtp_input1" value="" name="toRun"/><br/>
-                                                            </div>
-                                                            <br />
-                                                            <div class="form-group" style="display: inline-block">
-                                                                <div class="dropdown">
-                                                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" name="options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                                        Choose social network:
-                                                                        <span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                                <input type="hidden" id="toRun" value="" name="toRun"/><br />
+                                                            </div>*@
+                                                            <br/>
+                                                            <p>Choose social network:</p>
+                                                            <select class="form-control" style="display: inline-block" name="options">
                                                                         @if (Model.Account.IsFbAuthenticated || Session["FacebookAccessToken"] != null)
                                                                         {
-                                                                            <li value="Facebook"><a href="#">Facebook</a></li>
+                                                                            <option value="Facebook">Facebook</option>
                                                                         }
                                                                         @if (Model.Account.IsTwitterAuthenticated || Session["TwitterAccessToken"] != null || Session["TwitterAccessTokenSecret"] != null)
                                                                         {
-                                                                            <li value="Twitter"><a href="#">Twitter</a></li>
+                                                                            <option value="Twitter">Twitter</option>
                                                                         }
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
+                                                            </select>
                                                             <button type="submit" class="btn btn-info">Schedule</button>
                                                         }
                                                     }
@@ -203,6 +197,22 @@
     </div>
 </div>
 
+<div id="genericModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="title"></h4>
+            </div>
+            <div class="modal-body">
+                <p id="modalBody" style="margin-top: 15px; margin-left: 10px">  </p>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 @section scripts{
     @Scripts.Render("~/bundles/signalrHubs")
     <script src="~/signalr/hubs"></script>
@@ -226,26 +236,6 @@
             };
         });
 
-        //var doAjaxBeforeUnloadEnabled = true;
-        //var doAjaxBeforeUnload = function(evt) {
-        //    if (!doAjaxBeforeUnloadEnabled) {
-        //        return;
-        //    }
-        //    doAjaxBeforeUnloadEnabled = false;
-        //    jQuery.ajax({
-        //        url: "/Home/LogOutOnUnload/",
-        //        success: function(a) {
-        //            console.debug("Ajax call finished");
-        //        },
-        //        async: false
-        //    });
-        //}
-
-        //$(document).ready(function() {
-        //    window.onbeforeunload = doAjaxBeforeUnload;
-        //    $(window).unload(doAjaxBeforeUnload);
-        //});
-
         function performClick(elemId) {
             var elem = document.getElementById(elemId);
             if (elem && document.createEvent) {
@@ -263,8 +253,7 @@
                 autoclose: 1,
                 todayHighlight: 1,
                 startView: 2,
-                forceParse: 0,
-                showMeridian: 1
+                forceParse: 0
             });
         });
     </script>

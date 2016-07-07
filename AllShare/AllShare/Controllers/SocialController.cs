@@ -37,7 +37,7 @@ namespace AllShare.Controllers
         public async Task ScheduleJob(string text, string username, string imagePath, string toRun, string options)
         {
             var viewModel = (AccountViewModel)Session["User"];
-            SocialService.AddJob(text, viewModel.UserId, username, imagePath, DateTime.Parse(toRun), false);
+            SocialService.AddJob(text, viewModel.UserId, username, imagePath, DateTime.Parse(toRun), options.Equals("Facebook"));
         }
 
         [HttpPost]

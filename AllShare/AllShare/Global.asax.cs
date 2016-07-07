@@ -22,7 +22,7 @@ namespace AllShare
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             UnityWebActivator.Start();
             MapperConfig.Register();
-            //Jobs.JobScheduler.Start();
+            Jobs.JobScheduler.Start();
         }
 
         protected async void Session_End(object sender, EventArgs e)

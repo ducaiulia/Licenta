@@ -17,7 +17,7 @@ namespace AllShare.Jobs
                   (s =>
                      s.WithIntervalInMinutes(2)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(22, 20))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(09, 30))
                   )
                 .Build();
 

@@ -10,9 +10,9 @@
             data: { text: text, username: username, imagePath: imagePath}
         }).success(function() {
             console.log("success");
-            //$('#myModal #genericText').html("Published to Facebook feed successfully!");
-            //$('#myModal').foundation('reveal', 'open');
-            //setTimeout(SocialSpace.HideModal, 1500);
+            $('#genericModal #title').html("Info");
+            $('#genericModal #modalBody').html("Published to Facebook feed successfully!");
+            $('#genericModal').modal('show');
         });
     },
 
@@ -23,17 +23,17 @@
             data: { text: text, username: username, imagePath: imagePath}
         }).success(function () {
             console.log("success");
-            //$('#myModal #genericText').html("Published to Twitter feed successfully!");
-            //$('#myModal').foundation('reveal', 'open');
-            //setTimeout(SocialSpace.HideModal, 1500);
+            $('#genericModal #title').html("Info");
+            $('#genericModal #modalBody').html("Published to Twitter feed successfully!");
+            $('#genericModal').modal('show');
         });
     },
 
     Scheduled: function () {
         console.log("success");
-        //$('#myModal #genericText').html("Job scheduled with success!");
-        //$('#myModal').foundation('reveal', 'open');
-        //setTimeout(SocialSpace.HideModal, 1500);
+        $('#genericModal #title').html("Info");
+        $('#genericModal #modalBody').html("Job scheduled with success!");
+        $('#genericModal').modal('show');
     },
 
     OnBegin: function (button) {
@@ -46,7 +46,7 @@
             $('#genericModal #title').html("Error");
             $('#genericModal #title').css("color", "red");
             $('#genericModal #modalBody').html(data["message"]);
-            $('#genericModal').modal('show')
+            $('#genericModal').modal('show');
         }
         if (data["status"] === 1) {
             window.location.href = data["url"];
